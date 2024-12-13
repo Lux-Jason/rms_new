@@ -236,13 +236,96 @@ if (isset($_SESSION['username'])) {
 
         <!-- Cart and float experience -->
 
-        <div id="cart-float">
-            <button id="toggle-cart">🛒</button>
+        <div id="cart-float" onclick="openCart()" >
+            🛒
         </div>
 
         <!-- Back to top button -->
         <button id="back-to-top" style="display: none;">&uarr;</button>
 
+        <div id="cartModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeCartModal()">&times;</span>
+                <h2>My Cart</h2>
+                <div class="cart-items" id="cartItems">
+                    <!-- Cart item example -->
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <div class="cart-item">
+                        <div class="item-image">
+                            <img src="path/to/image1.jpg" alt="dish image">
+                        </div>
+                        <div class="item-details">
+                            <div class="item-name">Dish Name</div>
+                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
+                            <div class="item-total">Total Price: $60</div>
+                        </div>
+                    </div>
+                    <!-- Add more cart items as needed -->
+                </div>
+                <div class="cart-summary">
+                    <div class="total-quantity">Totol Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $240</div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -327,30 +410,35 @@ if (isset($_SESSION['username'])) {
                 window.scrollTo(0, c - c / 10);
             }
         }
-    });
 
-    function isUserLoggedIn() {
-        return isLoggedIn;
-    }
+        // Enable add to cart buttons based on login status
+        enableAddToCartButtons();
+    });
 
     function enableAddToCartButtons() {
         var buttons = document.getElementsByClassName('add-to-cart-button');
         for (var i = 0; i < buttons.length; i++) {
-            if (isUserLoggedIn()) {
+            if (isLoggedIn) {
                 buttons[i].disabled = false;
-                buttons[i].style.backgroundColor = 'initial';
-                buttons[i].style.color = 'initial';
+                // buttons[i].style.backgroundColor = 'green';  // 登录后按钮变为绿色
+                // buttons[i].style.color = 'white';  // 登录后按钮文字变为白色
             } else {
                 buttons[i].disabled = true;
-                buttons[i].style.backgroundColor = '#ccc';
-                buttons[i].style.color = '#666';
+                buttons[i].style.backgroundColor = '#ccc';  // 未登录时按钮为灰色
+                buttons[i].style.color = '#666';  // 未登录时按钮文字为灰色
             }
         }
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        enableAddToCartButtons();
-    });
+    function closeCartModal() {
+        document.getElementById("cartModal").style.display = "none";
+    }
+
+    function openCart() {
+        document.getElementById("cartModal").style.display = "block";
+    }
+
 </script>
+
 </body>
 </html>
