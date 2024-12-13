@@ -83,12 +83,12 @@
         <img src="qiao_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Registry</h2>
-        <form action="new_member.php" method="post">
+        <form action="login_pg.php" method="post">
             <input type="text" name="username" placeholder="Username" id="username" onfocus="inputFocus(this)" required>
             <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
-            <input type="password" name="confirm_password" placeholder="Confirm Password" id="conf_password" onfocus="inputFocus(this)" required>
+            <input type="password" name="conf_password" placeholder="Confirm Password" id="conf_password" onfocus="inputFocus(this)" required>
 
-            <select name="security_question" style="background-color: #ccc;" onfocus="inputFocus(this)" required>
+            <select name="security_question" id="security_question" style="background-color: #ccc;" onfocus="inputFocus(this)" required>
                 <option value="" disabled selected>Select Security Question 1</option>
                 <option value="first_pet">What is the name of your first pet?</option>
                 <option value="birth_city">What is the name of the city where you were born?</option>
@@ -96,45 +96,12 @@
                 <option value="primary_school_name">What's your primary school's name?</option>
                 <option value="street_grew_up_on">What is the name of the street you grew up on?</option>
             </select>
-            <input type="text" name="answer1" placeholder="Answer" onfocus="inputFocus(this)" required>
+            <input type="text" name="answer" id="answer" placeholder="Answer" onfocus="inputFocus(this)" required>
             <button type="submit">Register</button>
         </form>
         <p>Already have an account? <a href="login_page.php" class="links">Login</a></p>
     </div>
 </div>
-
-<?php
-include 'connectdb.php';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ensure data exists before accessing it
-    $username = isset($_POST['username']) ? $conn->real_escape_string($_POST['username']) : '';
-    $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : '';
-    $confirm_password = isset($_POST['confirm_password']) ? $conn->real_escape_string($_POST['confirm_password']) : '';
-    $safety_question1 = isset($_POST['security_question']) ? $conn->real_escape_string($_POST['security_question']) : '';
-    $answer1 = isset($_POST['answer1']) ? $conn->real_escape_string($_POST['answer1']) : '';
-
-    // Check if passwords match
-    if ($password !== $confirm_password) {
-        die("Passwords do not match!");
-    }
-
-    // Insert data into database
-    $sql = "INSERT INTO buyer (buyer_name, b_password, safety_question, answer) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $username, $password, $safety_question1, $answer1);
-
-    if ($stmt->execute()) {
-        echo "Register successfully";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-
-    $stmt->close();
-    $conn->close();
-}
-?>
-
 <script>
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
@@ -158,6 +125,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         input.style.borderColor = "#00AEEC";
     }
 </script>
+<?php
+include 'connectdb.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Ensure data exists before accessing it
+    $username = isset($_POST['username']) ? $conn->real_escape_string($_POST['username']) : '';
+    $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : '';
+    $confirm_password = isset($_POST['conf_password']) ? $conn->real_escape_string($_POST['conf_password']) : '';
+    $safety_question = isset($_POST['security_question']) ? $conn->real_escape_string($_POST['security_question']) : '';
+    $answer = isset($_POST['answer']) ? $conn->real_escape_string($_POST['answer']) : '';
+
+    // Check if passwords match
+    if ($password !== $confirm_password) {
+        die("Passwords do not match!");
+    }
+
+    // Insert data into database
+    $sql = "INSERT INTO buyer (buyer_name, b_password, safety_question, answer) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $username, $password, $safety_question, $answer);
+
+    if ($stmt->execute()) {
+        echo "Register successfully";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+?>
 
 </body>
 
