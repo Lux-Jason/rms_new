@@ -200,9 +200,9 @@
 
     <script>
         let cart = [
-            { name: 'Hot Spicy Chicken', Price: : 38, quantity: 2, image: 'food1.jpg' },
-            { name: 'Braised Pork', Price: : 45, quantity: 1, image: 'food2.jpg' },
-            { name: 'Piquant Teriyaki Shrimp Curry', Price: : 78, quantity: 1, image: 'food3.jpg' }
+            { name: 'Hot Spicy Chicken', Price:  38, quantity: 2, image: 'food1.jpg' },
+            { name: 'Braised Pork', Price: 45, quantity: 1, image: 'food2.jpg' },
+            { name: 'Piquant Teriyaki Shrimp Curry', Price: 78, quantity: 1, image: 'food3.jpg' }
         ];
 
         const discount = 0.10; // VIP deduction
@@ -239,7 +239,7 @@
                         <h3>${item.name}</h3>
                         <p>Price: : $${item.Price: .toFixed(2)}</p>
                         <p>Quantity: : ${item.quantity}</p>
-                        <p>Total: : $${(item.Price:  * item.quantity).toFixed(2)}</p>
+                        <p>Total: : $${(item.Price * item.quantity).toFixed(2)}</p>
                     </div>
                     <button class="remove-btn" onclick="removeFromCart('${item.name}')">Remove</button>
                 </li>
