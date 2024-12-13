@@ -77,7 +77,7 @@
         <img src="qiao_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Registry</h2>
-        <form id="registerForm" method="post">
+        <form action="new_member.php" id="registerForm" method="post">
             <input type="text" name="username" placeholder="Username" id="username" onfocus="inputFocus(this)" required>
             <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
             <input type="password" name="conf_password" placeholder="Confirm Password" id="conf_password" onfocus="inputFocus(this)" required>
@@ -93,7 +93,7 @@
             <input type="text" name="answer" id="answer" placeholder="Answer" onfocus="inputFocus(this)" required>
             <button type="submit">Register</button>
         </form>
-        <p>Already have an account? <a href="login_page.php" class="links">Login</a></p>
+        <p>Already have an account? <a href="login_pg.php" class="links">Login</a></p>
     </div>
 </div>
 
@@ -133,51 +133,6 @@
         }
     };
 </script>
-
-<?php
-include 'connectdb.php'; // 包含数据库连接
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 获取 POST 请求中的字段并进行转义处理
-    $username = isset($_POST['username']) ? $conn->real_escape_string($_POST['username']) : '';
-    $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $confirm_password = isset($_POST['conf_password']) ? $_POST['conf_password'] : '';
-    $safety_question = isset($_POST['security_question']) ? $conn->real_escape_string($_POST['security_question']) : '';
-    $answer = isset($_POST['answer']) ? $conn->real_escape_string($_POST['answer']) : '';
-
-    // 检查密码是否匹配
-    if ($password !== $confirm_password) {
-        echo "<script>alert('Passwords do not match!');</script>";
-    } else {
-        // 使用 password_hash() 函数加密密码
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // 插入数据的 SQL 语句
-        $sql = "INSERT INTO buyer (buyer_name, b_password, safety_question, answer) 
-                VALUES (?, ?, ?, ?)";
-
-        // 准备 SQL 语句
-        $stmt = $conn->prepare($sql);
-
-        // 绑定参数
-        $stmt->bind_param("ssss", $username, $hashed_password, $safety_question, $answer);
-
-        // 执行 SQL 语句
-        if ($stmt->execute()) {
-            // 注册成功，弹出提示框并跳转到登录页面
-            echo "<script>alert('Registration successful!'); window.location.href = 'login_page.php';</script>";
-        } else {
-            // 如果执行失败，弹出错误信息
-            echo "<script>alert('Error: " . $stmt->error . "');</script>";
-        }
-
-        // 关闭 SQL 语句
-        $stmt->close();
-    }
-    // 关闭数据库连接
-    $conn->close();
-}
-?>
 
 
 </body>
