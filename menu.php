@@ -8,8 +8,6 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-<?php include 'connectdb.php'; ?>
-
 <!-- Header section remains the same -->
 
 <div class="reserved_area" style="height: 32px;"></div>
@@ -22,6 +20,7 @@
 
 <!-- Fetch and display dishes from the database -->
 <?php
+include 'connectdb.php';
 $dishesPerPage = 12;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $dishesPerPage;
