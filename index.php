@@ -248,81 +248,10 @@ if (isset($_SESSION['username'])) {
                 <span class="close" onclick="closeCartModal()">&times;</span>
                 <h2>My Cart</h2>
                 <div class="cart-items" id="cartItems">
-                    <!-- Cart item example -->
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <div class="cart-item">
-                        <div class="item-image">
-                            <img src="path/to/image1.jpg" alt="dish image">
-                        </div>
-                        <div class="item-details">
-                            <div class="item-name">Dish Name</div>
-                            <div class="item-info">Discount: 10%&emsp;Quantity: 2&emsp;Price: $30</div>
-                            <div class="item-total">Total Price: $60</div>
-                        </div>
-                    </div>
-                    <!-- Add more cart items as needed -->
+                    <!-- Cart items will be dynamically inserted here -->
                 </div>
                 <div class="cart-summary">
-                    <div class="total-quantity">Totol Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $240</div>
+                    <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
                 </div>
             </div>
         </div>
@@ -357,6 +286,102 @@ if (isset($_SESSION['username'])) {
     </footer>
 
 <script>
+
+    let cart = [];
+    let isMember = false; // Default: not a member
+
+    // Function to load cart items from the database
+    function loadCart() {
+        fetch('get_cart_items.php') // Replace with the actual backend endpoint
+            .then(response => response.json())
+            .then(data => {
+                cart = data.items; // Store the cart items
+                isMember = data.isMember; // Store the user's membership status
+                updateCartDisplay();
+            })
+            .catch(error => console.error('Error fetching cart data:', error));
+    }
+
+    // Function to update cart display
+    function updateCartDisplay() {
+        const cartItemsContainer = document.getElementById('cartItems');
+        cartItemsContainer.innerHTML = '';  // Clear current items
+
+        let totalQuantity = 0;
+        let totalPrice = 0;
+
+        cart.forEach(item => {
+            const discount = isMember ? 0.1 : 0; // 10% discount for members
+            const priceAfterDiscount = item.price * (1 - discount);
+            const totalItemPrice = priceAfterDiscount * item.quantity;
+
+            totalQuantity += item.quantity;
+            totalPrice += totalItemPrice;
+
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('cart-item');
+
+            itemElement.innerHTML = `
+            <div class="item-image">
+                <img src="${item.image}" alt="${item.dish_name}">
+            </div>
+            <div class="item-details">
+                <div class="item-name">${item.dish_name}</div>
+                <div class="item-info">Discount: ${discount * 100}%&emsp;Quantity: ${item.quantity}&emsp;Price: $${priceAfterDiscount.toFixed(2)}</div>
+                <div class="item-total">Total Price: $${totalItemPrice.toFixed(2)}</div>
+                <button onclick="updateItemQuantity(${item.dish_id}, 'decrease')">-</button>
+                <button onclick="updateItemQuantity(${item.dish_id}, 'increase')">+</button>
+            </div>
+        `;
+
+            cartItemsContainer.appendChild(itemElement);
+        });
+
+        document.getElementById('totalQuantity').innerText = totalQuantity;
+        document.getElementById('totalPrice').innerText = totalPrice.toFixed(2);
+    }
+
+    // Function to update quantity of an item
+    function updateItemQuantity(dishId, action) {
+        const item = cart.find(item => item.dish_id === dishId);
+        if (!item) return;
+
+        if (action === 'increase') {
+            item.quantity++;
+        } else if (action === 'decrease' && item.quantity > 1) {
+            item.quantity--;
+        }
+
+        // Update the cart in the backend
+        fetch('update_cart.php', { // Replace with the actual backend endpoint
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ dishId: dishId, quantity: item.quantity })
+        })
+            .then(response => response.json())
+            .then(data => {
+                loadCart(); // Reload the cart to reflect changes
+            })
+            .catch(error => console.error('Error updating cart:', error));
+    }
+
+    // Load cart when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCart();
+    });
+
+    // Function to close the cart modal
+    function closeCartModal() {
+        document.getElementById("cartModal").style.display = "none";
+    }
+
+    // Function to open the cart modal
+    function openCart() {
+        document.getElementById("cartModal").style.display = "block";
+    }
+
     let slideIndex = 0;
     showSlides();
 
@@ -430,13 +455,6 @@ if (isset($_SESSION['username'])) {
         }
     }
 
-    function closeCartModal() {
-        document.getElementById("cartModal").style.display = "none";
-    }
-
-    function openCart() {
-        document.getElementById("cartModal").style.display = "block";
-    }
 
 </script>
 
