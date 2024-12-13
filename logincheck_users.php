@@ -1,35 +1,48 @@
 <?php
 session_start();
+include 'connectdb.php'; // 确保此文件包含数据库连接
 
-include 'connectdb.php';
+// 检查用户名和密码是否提供
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-// Prepare SQL statement
-$stmt = $conn->prepare("SELECT b_id, buyer_name, b_password, type, remains FROM buyer WHERE buyer_name = ?");
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+    // 准备SQL语句，按用户名查找用户
+    $stmt = $conn->prepare("SELECT b_id, buyer_name, b_password, type, remains, safety_question, answer FROM buyer WHERE buyer_name = :username");
+    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+    $stmt->execute();
 
-if ($result->num_rows > 0) {
-    $user = $result->fetch_assoc();
+    // 获取结果
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (password_verify($password, $user['b_password'])) {
-        // Set session variables
-        $_SESSION['username'] = $user['buyer_name'];
-        $_SESSION['balance'] = $user['remains'];
-        $_SESSION['last_activity'] = time();
+    if ($user) {
+        // 直接比较密码
+        if ($password === $user['b_password']) {
+            // 设置会话变量
+            $_SESSION['username'] = $user['buyer_name'];
+            $_SESSION['type'] = $user['type']; // 用户类型
+            $_SESSION['remains'] = $user['remains']; // 余额 (如果适用)
+            $_SESSION['last_activity'] = time(); // 记录最后活动时间
 
-        // Redirect based on user type
-        header("Location: index.php");
-        exit();
+            // 重定向到首页或用户的个人主页
+            header("Location: index.php");
+            exit();
+        } else {
+            // 密码错误
+            header("Location: login_pg.php?error=invalid_password");
+            exit();
+        }
     } else {
-        header("Location: login_pg.php?error=invalid_password");
+        // 用户未找到
+        header("Location: login_pg.php?error=user_not_found");
         exit();
     }
 } else {
-    header("Location: login_pg.php?error=user_not_found");
+    // 未提供用户名或密码
+    header("Location: login_pg.php?error=missing_credentials");
     exit();
 }
 
-$stmt->close();
-$conn->close();
+$stmt = null;
+$conn = null;
 ?>

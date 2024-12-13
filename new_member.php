@@ -21,7 +21,7 @@ if ($pwd1 === $pwd2) {
 
     if ($result) {
         echo "<script> alert('Registration Success. Redirecting you to login page.'); </script>";
-        echo "<meta http-equiv='Refresh' content='0;URL=login_page.php'>";
+        echo "<meta http-equiv='Refresh' content='0;URL=login_pg.php'>";
     } else {
         echo "<script> alert('Registration Failed. Try again later.'); </script>";
         echo "<meta http-equiv='Refresh' content='0;URL=registry_page.php'>";
