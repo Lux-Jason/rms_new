@@ -125,15 +125,17 @@
             <div class="modal-content">
                 <span class="close" onclick="closeLoginModal()">&times;</span>
                 <h2>Login</h2>
-                <form action="#" method="post">
+                <form action="logincheck_users.php.php" method="post"> <!-- Change action to login.php -->
                     <input type="text" name="username" placeholder="User Name" id="username" onfocus="inputFocus(this)" required>
                     <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
-                    <button type="submit">Login</button>
+                    <button type="submit" onclick="location.href=('logincheck_users.php')">Login</button>
                 </form>
                 <p><a href="#">Forget password? </a></p>
                 <p>Haven't got an account? <a href="register.php">register</a></p>
             </div>
         </div>
+
+
 
         <!-- Recommended Dishes -->
         <section class="recommended-dishes" style="margin-top: 0;">
