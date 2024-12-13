@@ -9,6 +9,16 @@
 </head>
 <body>
 
+<?php
+session_start();
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    echo "<script>alert('Welcome, $username')</script>";
+    echo "<script>var isLoggedIn = true;</script>";
+} else {
+    echo "<script>var isLoggedIn = false;</script>";
+}
+?>
     <!-- Header -->
     <header>
         <div class="logo-container">
@@ -125,7 +135,7 @@
             <div class="modal-content">
                 <span class="close" onclick="closeLoginModal()">&times;</span>
                 <h2>Login</h2>
-                <form action="logincheck_users.php.php" method="post"> <!-- Change action to login.php -->
+                <form action="logincheck_users.php" method="post"> <!-- Change action to login.php -->
                     <input type="text" name="username" placeholder="User Name" id="username" onfocus="inputFocus(this)" required>
                     <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
                     <button type="submit" onclick="location.href=('logincheck_users.php')">Login</button>
@@ -271,11 +281,11 @@
         let i;
         let slides = document.getElementsByClassName("mySlides");
         for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";  
+            slides[i].style.display = "none";
         }
         slideIndex++;
-        if (slideIndex > slides.length) {slideIndex = 1}    
-        slides[slideIndex-1].style.display = "block";  
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
         setTimeout(showSlides, 3000); // Change image every 3 seconds
     }
 
@@ -292,32 +302,55 @@
         document.getElementById("password").style.backgroundColor = "white";
     }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const backToTopButton = document.getElementById('back-to-top');
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const backToTopButton = document.getElementById('back-to-top');
 
-    // event listener to listen to scroll
-    window.onscroll = function() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
+        // event listener to listen to scroll
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        };
+
+        // click back to top button
+        backToTopButton.onclick = function() {
+            smoothScrollToTop();
         }
-    };
 
-    // click back to top button
-    backToTopButton.onclick = function() {
-        smoothScrollToTop();
+        // scroll to the top smoothly
+        function smoothScrollToTop() {
+            const c = document.documentElement.scrollTop || document.body.scrollTop;
+            if (c > 0) {
+                window.requestAnimationFrame(smoothScrollToTop);
+                window.scrollTo(0, c - c / 10);
+            }
+        }
+    });
+
+    function isUserLoggedIn() {
+        return isLoggedIn;
     }
 
-    // scroll to the top smoothly
-    function smoothScrollToTop() {
-        const c = document.documentElement.scrollTop || document.body.scrollTop;
-        if (c > 0) {
-            window.requestAnimationFrame(smoothScrollToTop);
-            window.scrollTo(0, c - c / 10);
+    function enableAddToCartButtons() {
+        var buttons = document.getElementsByClassName('add-to-cart-button');
+        for (var i = 0; i < buttons.length; i++) {
+            if (isUserLoggedIn()) {
+                buttons[i].disabled = false;
+                buttons[i].style.backgroundColor = 'initial';
+                buttons[i].style.color = 'initial';
+            } else {
+                buttons[i].disabled = true;
+                buttons[i].style.backgroundColor = '#ccc';
+                buttons[i].style.color = '#666';
+            }
         }
     }
-});
+
+    document.addEventListener('DOMContentLoaded', function() {
+        enableAddToCartButtons();
+    });
 </script>
 </body>
 </html>
