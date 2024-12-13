@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +14,9 @@
             background-image: url('bg_07_16.jpg');
             background-size: 100%;
             background-position: center;
-            background-repeat: no-repeat; /* repeat pic */
-            height: 100vh; /* fill the page */
+            background-repeat: no-repeat;
+            height: 100vh;
         }
-
         .main-container {
             display: flex;
             position: relative;
@@ -26,7 +24,6 @@
             align-items: center;
             height: 100vh;
         }
-
         .register-container {
             width: 30%;
             background-color: #f9f9f9;
@@ -34,16 +31,13 @@
             border-radius: 5px;
             text-align: center;
         }
-
         .register-container h2 {
             margin-top: 0;
             text-align: center;
         }
-
         .register-container form {
             text-align: center;
         }
-
         .register-container input[type="text"],
         .register-container input[type="password"],
         .register-container button,
@@ -55,39 +49,39 @@
             border-radius: 5px;
             box-sizing: border-box;
         }
-
         .register-container button {
             background-color: #007bff;
             color: #fff;
             border: none;
             cursor: pointer;
         }
-
+        .warning {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
         .links {
             color: #00aeec;
         }
-
         .links:hover {
             color: #00aeec;
         }
-
         .links:visited {
             color: #00aeec;
         }
     </style>
 </head>
-
 <body>
 <div class="main-container">
     <div class="register-container">
         <img src="qiao_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Registry</h2>
-        <form action="login_pg.php" method="post">
+        <form id="registerForm" method="post">
             <input type="text" name="username" placeholder="Username" id="username" onfocus="inputFocus(this)" required>
             <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
             <input type="password" name="conf_password" placeholder="Confirm Password" id="conf_password" onfocus="inputFocus(this)" required>
-
+            <div class="warning" id="passwordWarning">Passwords do not match!</div>
             <select name="security_question" id="security_question" style="background-color: #ccc;" onfocus="inputFocus(this)" required>
                 <option value="" disabled selected>Select Security Question 1</option>
                 <option value="first_pet">What is the name of your first pet?</option>
@@ -102,6 +96,7 @@
         <p>Already have an account? <a href="login_page.php" class="links">Login</a></p>
     </div>
 </div>
+
 <script>
     var currentDate = new Date();
     var currentHour = currentDate.getHours();
@@ -124,39 +119,66 @@
         input.style.backgroundColor = "white";
         input.style.borderColor = "#00AEEC";
     }
+
+    document.getElementById('registerForm').onsubmit = function(event) {
+        var password = document.getElementById('password').value;
+        var confPassword = document.getElementById('conf_password').value;
+        var warning = document.getElementById('passwordWarning');
+
+        if (password !== confPassword) {
+            warning.style.display = 'block';
+            event.preventDefault(); // Prevent form submission
+        } else {
+            warning.style.display = 'none';
+        }
+    };
 </script>
+
 <?php
-include 'connectdb.php';
+include 'connectdb.php'; // 包含数据库连接
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Ensure data exists before accessing it
+    // 获取 POST 请求中的字段并进行转义处理
     $username = isset($_POST['username']) ? $conn->real_escape_string($_POST['username']) : '';
-    $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : '';
-    $confirm_password = isset($_POST['conf_password']) ? $conn->real_escape_string($_POST['conf_password']) : '';
+    $password = isset($_POST['password']) ? $_POST['password'] : '';
+    $confirm_password = isset($_POST['conf_password']) ? $_POST['conf_password'] : '';
     $safety_question = isset($_POST['security_question']) ? $conn->real_escape_string($_POST['security_question']) : '';
     $answer = isset($_POST['answer']) ? $conn->real_escape_string($_POST['answer']) : '';
 
-    // Check if passwords match
+    // 检查密码是否匹配
     if ($password !== $confirm_password) {
-        die("Passwords do not match!");
-    }
-
-    // Insert data into database
-    $sql = "INSERT INTO buyer (buyer_name, b_password, safety_question, answer) VALUES (?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $username, $password, $safety_question, $answer);
-
-    if ($stmt->execute()) {
-        echo "Register successfully";
+        echo "<script>alert('Passwords do not match!');</script>";
     } else {
-        echo "Error: " . $stmt->error;
-    }
+        // 使用 password_hash() 函数加密密码
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    $stmt->close();
+        // 插入数据的 SQL 语句
+        $sql = "INSERT INTO buyer (buyer_name, b_password, safety_question, answer) 
+                VALUES (?, ?, ?, ?)";
+
+        // 准备 SQL 语句
+        $stmt = $conn->prepare($sql);
+
+        // 绑定参数
+        $stmt->bind_param("ssss", $username, $hashed_password, $safety_question, $answer);
+
+        // 执行 SQL 语句
+        if ($stmt->execute()) {
+            // 注册成功，弹出提示框并跳转到登录页面
+            echo "<script>alert('Registration successful!'); window.location.href = 'login_page.php';</script>";
+        } else {
+            // 如果执行失败，弹出错误信息
+            echo "<script>alert('Error: " . $stmt->error . "');</script>";
+        }
+
+        // 关闭 SQL 语句
+        $stmt->close();
+    }
+    // 关闭数据库连接
     $conn->close();
 }
 ?>
 
-</body>
 
+</body>
 </html>
