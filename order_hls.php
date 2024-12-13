@@ -29,10 +29,10 @@
     <header>
         <div class="logo-container">
             <div style="width: 20px;"></div>
-            <a href="index.html"><img src="qiao_logo.svg" alt="Qiao's Handmade" class="logo"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()></a>
+            <a href="index.php"><img src="qiao_logo.svg" alt="Qiao's Handmade" class="logo" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()></a>
             <div style="width: 20px;"></div>
             <nav>
-                <a href="index.html" class="button">Home</a>
+                <a href="index.php" class="button">Home</a>
                 <a href="menu.html" class="button">All Dishes</a>
                 <a href="reserve_tb.html" class="button">Reserve a table</a>
             </nav>
