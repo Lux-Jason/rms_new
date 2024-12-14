@@ -46,7 +46,7 @@
             <div style="width: 20px;"></div>
             <nav>
                 <a href="index.php" class="button">Home</a>
-                <a href="menu.html" class="button">All Dishes</a>
+                <a href="menu.php" class="button">All Dishes</a>
                 <a href="reserve_tb.html" class="button">Reserve a table</a>
             </nav>
         </div>
