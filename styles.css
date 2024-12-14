@@ -350,10 +350,6 @@ footer {
     gap: 10px;
 }
 
-.pagenation button {
-    border-radius: 80px;
-}
-
 .page-number {
     background-color: #ddd;
     color: black;
@@ -567,4 +563,8 @@ footer {
 
 #checkout_button:hover {
     background-color: #d3a863;
+}
+
+.pagination button {
+    border-radius: 15px;
 }

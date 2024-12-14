@@ -10,8 +10,6 @@
 <body>
 <!-- Header section remains the same -->
 
-<div class="reserved_area" style="height: 32px;"></div>
-
 <div class="selector-outside">
     <!-- Selector container remains the same -->
 </div>
@@ -190,73 +188,62 @@ $totalPages = ceil($total / $dishesPerPage);
     </div>
 </section>
 
-<!-- Other Information -->
-<section class="other-information">
-    <h2>About us</h2>
-    <div class="info-container">
-        <div class="info-box">
-            <h3>Running Time: </h3>
-            <p>Monday to Saturday<br>10:00 - 22:00</p >
-
-
-            <!-- Page Navigation -->
-            <section class="page-navigation">
-                <div class="pagination">
-                    <button class="page-number prev" onclick="changePage(-1)">&laquo;</button>
-                    <button class="page-number current-page" id="currentPage">1</button>
-                    <button class="page-number next" onclick="changePage(1)">&raquo;</button>
+<!-- Page Navigation -->
+<section class="page-navigation">
+    <div class="pagination">
+        <button class="page-number prev" onclick="changePage(-1)">&laquo;</button>
+        <button class="page-number current-page" id="currentPage">1</button>
+        <button class="page-number next" onclick="changePage(1)">&raquo;</button>
+    </div>
+</section>
+<div class="reserved_area" style="height: 32px;"></div>
+    <!-- Footer -->
+    <footer>
+        <!-- Other Information -->
+        <section class="other-information" style="color: #000000;">
+            <h2>About us</h2>
+            <div class="info-container">
+                <div class="info-box">
+                    <h3>Running Time: </h3>
+                    <p>Monday to Saturday<br>10:00 - 22:00</p>
                 </div>
-            </section>
-
-            <div id="reserved_area" style="height: 32px;"></div>
-
-            <!-- Other Information -->
-            <section class="other-information">
-                <h2>About us</h2>
-                <div class="info-container">
-                    <div class="info-box">
-                        <h3>Running Time: </h3>
-                        <p>Monday to Saturday<br>10:00 - 22:00</p>
-                    </div>
-                    <div class="info-box">
-                        <h3>Contact us: </h3>
-                        <p>Telephone: 19935820001</p>
-                        <p>E-mail: info@qiaohandmade.com</p>
-                    </div>
-                    <div class="info-box">
-                        <h3>Address: </h3>
-                        <p>BNU-UIC 2nd D5B-A111</p>
-                    </div>
+                <div class="info-box">
+                    <h3>Contact us: </h3>
+                    <p>Telephone: 19935820001</p>
+                    <p>E-mail: info@qiaohandmade.com</p>
                 </div>
-                <div id="cart-float" onclick="openCart()" >
-                    🛒
+                <div class="info-box">
+                    <h3>Address: </h3>
+                    <p>BNU-UIC 2nd D5B-A111</p>
                 </div>
+            </div>
+        </section>
+        <div class="footer-content">
+            <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
+            <a href="admin.php">Admin Page</a>
+        </div>
+    </footer>
 
-                <!-- Back to top button -->
-                <button id="back-to-top" style="display: none;">&uarr;</button>
+    <div id="cart-float" onclick="openCart()" >
+            🛒
+    </div>
 
-                <div id="cartModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close" onclick="closeCartModal()">&times;</span>
-                        <h2>My Cart</h2>
-                        <div class="cart-items" id="cartItems">
-                            <!-- Cart items will be dynamically inserted here -->
-                        </div>
-                        <div class="cart-summary">
-                            <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
-                            <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    <!-- Back to top button -->
+    <button id="back-to-top" style="display: none;">&uarr;</button>
 
-            <!-- Footer -->
-            <footer>
-                <div class="footer-content">
-                    <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
-                    <a href="admin.html">Admin Page</a>
-                </div>
-            </footer>
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCartModal()">&times;</span>
+            <h2>My Cart</h2>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div class="cart-summary">
+                <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
+                <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
+            </div>
+        </div>
+    </div>
 
             <script>
                 let currentPage = 1;
@@ -464,21 +451,6 @@ $totalPages = ceil($total / $dishesPerPage);
                     loadCart();
                 });
 
-                let slideIndex = 0;
-                showSlides();
-
-                function showSlides() {
-                    let i;
-                    let slides = document.getElementsByClassName("mySlides");
-                    for (i = 0; i < slides.length; i++) {
-                        slides[i].style.display = "none";
-                    }
-                    slideIndex++;
-                    if (slideIndex > slides.length) {slideIndex = 1}
-                    slides[slideIndex-1].style.display = "block";
-                    setTimeout(showSlides, 3000); // Change image every 3 seconds
-                }
-
                 function loginNotice() {
                     document.getElementById("loginModal").style.display = "block";
                 }
@@ -492,32 +464,32 @@ $totalPages = ceil($total / $dishesPerPage);
                     document.getElementById("password").style.backgroundColor = "white";
                 }
 
-                document.addEventListener('DOMContentLoaded', (event) => {
-                    const backToTopButton = document.getElementById('back-to-top');
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const backToTopButton = document.getElementById('back-to-top');
 
-                    // Event listener to listen to scroll
-                    window.onscroll = function() {
-                        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                            backToTopButton.style.display = 'block';
-                        } else {
-                            backToTopButton.style.display = 'none';
-                        }
-                    };
+            // event listener to listen to scroll
+            window.onscroll = function() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            };
 
-                    // Click back to top button
-                    backToTopButton.onclick = function() {
-                        smoothScrollToTop();
-                    };
+            // click back to top button
+            backToTopButton.onclick = function() {
+                smoothScrollToTop();
+            }
 
-                    // Scroll to the top smoothly
-                    function smoothScrollToTop() {
-                        const c = document.documentElement.scrollTop || document.body.scrollTop;
-                        if (c > 0) {
-                            window.requestAnimationFrame(smoothScrollToTop);
-                            window.scrollTo(0, c - c / 10);
-                        }
-                    }
-                });
+            // scroll to the top smoothly
+            function smoothScrollToTop() {
+                const c = document.documentElement.scrollTop || document.body.scrollTop;
+                if (c > 0) {
+                    window.requestAnimationFrame(smoothScrollToTop);
+                    window.scrollTo(0, c - c / 10);
+                }
+            }
+        });
 
                 // Initialize the page
                 loadDishesForPage(currentPage);
