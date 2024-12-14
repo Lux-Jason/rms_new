@@ -322,16 +322,16 @@ if (isset($_SESSION['username'])) {
             itemElement.classList.add('cart-item');
 
             itemElement.innerHTML = `
-        <div class="item-image">
-            <img src="${item.image}" alt="${item.dish_name}">
-        </div>
-        <div class="item-details">
-            <div class="item-name">${item.dish_name}</div>
-            <div class="item-info">Discount: ${discount * 100}%&emsp;Quantity: ${item.quantity}&emsp;Price: $${priceAfterDiscount.toFixed(2)}</div>
-            <div class="item-total">Total Price: $${totalItemPrice.toFixed(2)}</div>
-            <button onclick="updateItemQuantity(${item.dish_id}, 'decrease')">-</button>
-            <button onclick="updateItemQuantity(${item.dish_id}, 'increase')">+</button>
-        </div>
+            <div class="item-image">
+                <img src="${item.image}" alt="${item.dish_name}">
+            </div>
+            <div class="item-details">
+                <div class="item-name">${item.dish_name}</div>
+                <div class="item-info">Discount: ${discount * 100}%&emsp;Quantity: ${item.quantity}&emsp;Price: $${priceAfterDiscount.toFixed(2)}</div>
+                <div class="item-total">Total Price: $${totalItemPrice.toFixed(2)}</div>
+                <button onclick="updateItemQuantity(${item.dish_id}, 'decrease')">-</button>
+                <button onclick="updateItemQuantity(${item.dish_id}, 'increase')">+</button>
+            </div>
         `;
 
             cartItemsContainer.appendChild(itemElement);
@@ -367,58 +367,93 @@ if (isset($_SESSION['username'])) {
             .catch(error => console.error('Error updating cart:', error));
     }
 
-    // Function to add a dish to the cart
-    function addToCart(dishId, dishName, price, image) {
-        // Check if the item is already in the cart
-        const existingItem = cart.find(item => item.dish_id === dishId);
-        if (existingItem) {
-            // Increase quantity if item exists
-            existingItem.quantity++;
-        } else {
-            // Add new item to cart
-            const newItem = {
-                dish_id: dishId,
-                dish_name: dishName,
-                price: price,
-                quantity: 1,
-                image: image
-            };
-            cart.push(newItem);
-        }
-
-        // Update cart in backend
-        fetch('add_to_cart.php', {  // Backend endpoint to add an item to the cart
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ dishId: dishId, quantity: 1 })  // Send quantity as 1
-        })
-            .then(response => response.json())
-            .then(data => {
-                loadCart(); // Reload the cart to reflect the added item
-            })
-            .catch(error => console.error('Error adding item to cart:', error));
-    }
-
-    // Event listener for "Add to Cart" buttons
-    document.querySelectorAll('.add-to-cart-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const dishElement = this.closest('.dish');
-            const dishId = parseInt(dishElement.querySelector('.dish-info').dataset.dishId);
-            const dishName = dishElement.querySelector('.name').textContent;
-            const price = parseFloat(dishElement.querySelector('.price').textContent.slice(1));  // Remove "$" sign and parse as float
-            const image = dishElement.querySelector('img').src;
-
-            addToCart(dishId, dishName, price, image);
-        });
-    });
-
     // Load cart when page loads
     document.addEventListener('DOMContentLoaded', () => {
         loadCart();
     });
 
+    // Function to close the cart modal
+    function closeCartModal() {
+        document.getElementById("cartModal").style.display = "none";
+    }
+
+    // Function to open the cart modal
+    function openCart() {
+        document.getElementById("cartModal").style.display = "block";
+    }
+
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000); // Change image every 3 seconds
+    }
+
+    function loginNotice() {
+        document.getElementById("loginModal").style.display = "block";
+    }
+
+    function closeLoginModal() {
+        document.getElementById("loginModal").style.display = "none";
+    }
+
+    function inputFocus(input) {
+        document.getElementById("username").style.backgroundColor = "white";
+        document.getElementById("password").style.backgroundColor = "white";
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const backToTopButton = document.getElementById('back-to-top');
+
+        // event listener to listen to scroll
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        };
+
+        // click back to top button
+        backToTopButton.onclick = function() {
+            smoothScrollToTop();
+        }
+
+        // scroll to the top smoothly
+        function smoothScrollToTop() {
+            const c = document.documentElement.scrollTop || document.body.scrollTop;
+            if (c > 0) {
+                window.requestAnimationFrame(smoothScrollToTop);
+                window.scrollTo(0, c - c / 10);
+            }
+        }
+
+        // Enable add to cart buttons based on login status
+        enableAddToCartButtons();
+    });
+
+    function enableAddToCartButtons() {
+        var buttons = document.getElementsByClassName('add-to-cart-button');
+        for (var i = 0; i < buttons.length; i++) {
+            if (isLoggedIn) {
+                buttons[i].disabled = false;
+                // buttons[i].style.backgroundColor = 'green';  // 登录后按钮变为绿色
+                // buttons[i].style.color = 'white';  // 登录后按钮文字变为白色
+            } else {
+                buttons[i].disabled = true;
+                buttons[i].style.backgroundColor = '#ccc';  // 未登录时按钮为灰色
+                buttons[i].style.color = '#666';  // 未登录时按钮文字为灰色
+            }
+        }
+    }
 
 
 </script>
