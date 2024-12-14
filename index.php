@@ -145,93 +145,90 @@ if (isset($_SESSION['username'])) {
             </div>
         </div>
 
+<?php
+include 'connectdb.php';
+$dishesPerPage = 12;
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $dishesPerPage;
 
+$filters = array();
+$params = array();
+
+// Handle search keyword
+if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+    $filters[] = "dish_name LIKE :keyword OR description LIKE :keyword";
+    $params[':keyword'] = '%' . $_GET['keyword'] . '%';
+}
+
+// Handle notes filter
+if (isset($_GET['notes']) && $_GET['notes'] != '') {
+    $filters[] = "note = :note";
+    $params[':note'] = $_GET['notes'];
+}
+
+// Handle price filter
+if (isset($_GET['price']) && $_GET['price'] != '') {
+    switch ($_GET['price']) {
+        case 'l10':
+            $filters[] = "price < 10";
+            break;
+        case '1020':
+            $filters[] = "price BETWEEN 10 AND 20";
+            break;
+        // Add cases for other price ranges
+    }
+}
+
+// Handle content filter and dish type filter similarly
+
+// Construct the SQL query
+$sql = "SELECT * FROM menu";
+if (!empty($filters)) {
+    $sql .= " WHERE " . implode(" AND ", $filters);
+}
+$sql .= " LIMIT :offset, :limit";
+
+// Prepare and execute the statement
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindValue(':limit', $dishesPerPage, PDO::PARAM_INT);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value);
+}
+$stmt->execute();
+$dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch total number of dishes
+$totalSql = "SELECT COUNT(*) AS total FROM menu";
+if (!empty($filters)) {
+    $totalSql .= " WHERE " . implode(" AND ", $filters);
+}
+$totalStmt = $conn->prepare($totalSql);
+foreach ($params as $key => $value) {
+    $totalStmt->bindValue($key, $value);
+}
+$totalStmt->execute();
+$total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total'];
+$totalPages = ceil($total / $dishesPerPage);
+?>
 
         <!-- Recommended Dishes -->
         <section class="recommended-dishes" style="margin-top: 0;">
             <h2>Recommended Dishes</h2>
-            <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
-                <div class="dish">
-                    <img src="Strongly Spicy Chicken.jpg" alt="Hot Spicy Chicken" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Hot Spicy Chicken</div>
-                        <div class="price">$38</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
+            <section class="dishes-display">
+                <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
+                    <?php foreach ($dishes as $dish): ?>
+                        <div class="dish">
+                            <img src="<?php echo $dish['image'] ? $dish['image'] : 'nodish.jpg'; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
+                            <div class="dish-info">
+                                <div class="name"><?php echo $dish['dish_name']; ?></div>
+                                <div class="price"><?php echo '$' . $dish['price']; ?></div>
+                                <button class="add-to-cart-button">Add to Cart</button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <div class="dish">
-                    <img src="Braised Pork.jpg" alt="Braised Pork" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Braised Pork</div>
-                        <div class="price">$45</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Water-Boiled Fish.jpg" alt="Water-Boiled Fish" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Water-Boiled Fish</div>
-                        <div class="price">$68</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Kung Pao Shrimps.jpg" alt="Kung Pao Shrimps" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Kung Pao Shrimps</div>
-                        <div class="price">$58</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Citrus Fried Beef.jpg" alt="Citrus Fried Beef" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Citrus Fried Beef</div>
-                        <div class="price">$48</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Steamed Coconut Pork Grill.jpg" alt="Steamed Coconut Pork Grill" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Steamed Coconut Pork Grill</div>
-                        <div class="price">$38</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Piquant Teriyaki Shrimp Curry.jpg" alt="Piquant Teriyaki Shrimp Curry" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Piquant Teriyaki Shrimp Curry</div>
-                        <div class="price">$78</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Roasted Herb Vegetables Risotto.jpg" alt="Roasted Herb Vegetables Risotto" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Roasted Herb Vegetables Risotto</div>
-                        <div class="price">$58</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Sautéed Sesame Fish Pizza.jpg" alt="Sautéed Sesame Fish Pizza" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Sautéed Sesame Fish Pizza</div>
-                        <div class="price">$48</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-                <div class="dish">
-                    <img src="Fried Herb Tofu Pizza.jpg" alt="Fried Herb Tofu Pizza" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                    <div class="dish-info">
-                        <div class="name">Fried Herb Tofu Pizza</div>
-                        <div class="price">$28</div>
-                        <button class="add-to-cart-button">Add to Cart</button>
-                    </div>
-                </div>
-            </div>
+            </section>
         </section>
 
         <!-- Cart and float experience -->
