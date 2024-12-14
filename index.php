@@ -154,6 +154,10 @@ $offset = ($page - 1) * $dishesPerPage;
 $filters = array();
 $params = array();
 
+// Always add the note filter for "r"
+$filters[] = "note = :note";
+$params[':note'] = 'r';
+
 // Handle search keyword
 if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $filters[] = "dish_name LIKE :keyword OR description LIKE :keyword";
@@ -162,8 +166,8 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 
 // Handle notes filter
 if (isset($_GET['notes']) && $_GET['notes'] != '') {
-    $filters[] = "note = :note";
-    $params[':note'] = $_GET['notes'];
+    $filters[] = "note = :notes";
+    $params[':notes'] = $_GET['notes'];
 }
 
 // Handle price filter
