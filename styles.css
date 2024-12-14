@@ -350,10 +350,6 @@ footer {
     gap: 10px;
 }
 
-.pagenation button {
-    border-radius: 80px;
-}
-
 .page-number {
     background-color: #ddd;
     color: black;
