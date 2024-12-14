@@ -229,6 +229,7 @@ $totalPages = ceil($total / $dishesPerPage);
                                 <div class="price"><?php echo '$' . $dish['price']; ?></div>
                                 <button class="add-to-cart-button">Add to Cart</button>
                             </div>
+                            <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
                         </div>
                     <?php endforeach; ?>
                 </div>
