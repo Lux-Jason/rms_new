@@ -252,6 +252,7 @@ if (isset($_SESSION['username'])) {
                 </div>
                 <div class="cart-summary">
                     <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
+                    <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
                 </div>
             </div>
         </div>
@@ -289,6 +290,13 @@ if (isset($_SESSION['username'])) {
 
     let cart = [];
     let isMember = false; // Default: not a member
+    function openCart() {
+        document.getElementById("cartModal").style.display = "block";
+    }
+
+    function closeCartModal() {
+        document.getElementById("cartModal").style.display = "none";
+    }
 
     // Function to load cart items from the database
     function loadCart() {
@@ -454,6 +462,60 @@ if (isset($_SESSION['username'])) {
             }
         }
     }
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+        let i;
+        let slides = document.getElementsByClassName("mySlides");
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {slideIndex = 1}
+        slides[slideIndex-1].style.display = "block";
+        setTimeout(showSlides, 3000); // Change image every 3 seconds
+    }
+
+    function loginNotice() {
+        document.getElementById("loginModal").style.display = "block";
+    }
+
+    function closeLoginModal() {
+        document.getElementById("loginModal").style.display = "none";
+    }
+
+    function inputFocus(input) {
+        document.getElementById("username").style.backgroundColor = "white";
+        document.getElementById("password").style.backgroundColor = "white";
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        const backToTopButton = document.getElementById('back-to-top');
+
+        // event listener to listen to scroll
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        };
+
+        // click back to top button
+        backToTopButton.onclick = function() {
+            smoothScrollToTop();
+        }
+
+        // scroll to the top smoothly
+        function smoothScrollToTop() {
+            const c = document.documentElement.scrollTop || document.body.scrollTop;
+            if (c > 0) {
+                window.requestAnimationFrame(smoothScrollToTop);
+                window.scrollTo(0, c - c / 10);
+            }
+        }
+    });
 
 
 </script>

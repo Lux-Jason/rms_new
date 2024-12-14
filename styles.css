@@ -561,3 +561,10 @@ footer {
     font-size: 18px;
     font-weight: bold;
 }
+#checkout_button {
+    background-color: #e3b873;
+}
+
+#checkout_button:hover {
+    background-color: #d3a863;
+}
