@@ -58,7 +58,7 @@
         .warning {
             color: red;
             font-size: 0.9em;
-            display: none;
+            display: none;  /* 默认不显示 */
         }
         .links {
             color: #00aeec;
@@ -81,8 +81,10 @@
             <input type="text" name="username" placeholder="Username" id="username" onfocus="inputFocus(this)" required>
             <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
             <input type="password" name="conf_password" placeholder="Confirm Password" id="conf_password" onfocus="inputFocus(this)" required>
-            <div class="warning" id="passwordWarning">Passwords do not match!</div>
-            <select name="security_question" id="security_question" style="background-color: #ccc;" onfocus="inputFocus(this)" required>
+            <div id="passwordWarning" class="warning">Passwords do not match!</div>
+
+            <!-- Security Questions -->
+            <select name="security_question1" id="security_question1" style="background-color: #ccc;" onfocus="inputFocus(this)" required>
                 <option value="" disabled selected>Select Security Question 1</option>
                 <option value="first_pet">What is the name of your first pet?</option>
                 <option value="birth_city">What is the name of the city where you were born?</option>
@@ -90,7 +92,28 @@
                 <option value="primary_school_name">What's your primary school's name?</option>
                 <option value="street_grew_up_on">What is the name of the street you grew up on?</option>
             </select>
-            <input type="text" name="answer" id="answer" placeholder="Answer" onfocus="inputFocus(this)" required>
+            <input type="text" name="answer1" placeholder="Answer 1" id="answer1" onfocus="inputFocus(this)" required>
+
+            <select name="security_question2" id="security_question2" style="background-color: #ccc;" onfocus="inputFocus(this)">
+                <option value="" disabled selected>Select Security Question 2 (Optional)</option>
+                <option value="first_pet">What is the name of your first pet?</option>
+                <option value="birth_city">What is the name of the city where you were born?</option>
+                <option value="best_childhood_friend">What is the name of your best childhood friend?</option>
+                <option value="primary_school_name">What's your primary school's name?</option>
+                <option value="street_grew_up_on">What is the name of the street you grew up on?</option>
+            </select>
+            <input type="text" name="answer2" placeholder="Answer 2 (Optional)" id="answer2" onfocus="inputFocus(this)">
+
+            <select name="security_question3" id="security_question3" style="background-color: #ccc;" onfocus="inputFocus(this)">
+                <option value="" disabled selected>Select Security Question 3 (Optional)</option>
+                <option value="first_pet">What is the name of your first pet?</option>
+                <option value="birth_city">What is the name of the city where you were born?</option>
+                <option value="best_childhood_friend">What is the name of your best childhood friend?</option>
+                <option value="primary_school_name">What's your primary school's name?</option>
+                <option value="street_grew_up_on">What is the name of the street you grew up on?</option>
+            </select>
+            <input type="text" name="answer3" placeholder="Answer 3 (Optional)" id="answer3" onfocus="inputFocus(this)">
+
             <button type="submit">Register</button>
         </form>
         <p>Already have an account? <a href="login_pg.php" class="links">Login</a></p>
@@ -126,14 +149,12 @@
         var warning = document.getElementById('passwordWarning');
 
         if (password !== confPassword) {
-            warning.style.display = 'block';
-            event.preventDefault(); // Prevent form submission
+            warning.style.display = 'block';  // 显示警告信息
+            event.preventDefault(); // 阻止表单提交
         } else {
-            warning.style.display = 'none';
+            warning.style.display = 'none';  // 隐藏警告信息
         }
     };
 </script>
-
-
 </body>
 </html>

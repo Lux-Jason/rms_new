@@ -8,7 +8,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $password = $_POST['password'];
 
     // 准备SQL语句，按用户名查找用户
-    $stmt = $conn->prepare("SELECT b_id, buyer_name, b_password, type, remains, safety_question, answer FROM buyer WHERE buyer_name = :username");
+    $stmt = $conn->prepare("SELECT b_id, buyer_name, b_password, type, remains FROM buyer WHERE buyer_name = :username");
     $stmt->bindValue(':username', $username, PDO::PARAM_STR);
     $stmt->execute();
 
@@ -16,8 +16,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // 直接比较密码
-        if ($password === $user['b_password']) {
+        // 使用 password_verify() 比较用户输入的密码与数据库中的哈希密码
+        if (password_verify($password, $user['b_password'])) {
             // 设置会话变量
             $_SESSION['username'] = $user['buyer_name'];
             $_SESSION['type'] = $user['type']; // 用户类型

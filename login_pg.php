@@ -54,6 +54,10 @@
             border: none;
             cursor: pointer;
         }
+        .login-container button:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+        }
         .links {
             color: #00aeec;
         }
@@ -63,6 +67,11 @@
         .links:visited {
             color: #00aeec;
         }
+        .warning {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -71,9 +80,10 @@
         <img src="qiao_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Login</h2>
-        <form action="logincheck_users.php" method="post">
+        <form id="loginForm" action="logincheck_users.php" method="post">
             <input type="text" name="username" placeholder="Username" id="username" onfocus="inputFocus(this)" required>
             <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
+            <div id="warning" class="warning">Invalid username or password!</div>
             <button type="submit">Login</button>
         </form>
         <p><a href="reset_pwd_pg.php" class="links">Forgot Password?</a></p>
@@ -91,18 +101,33 @@
     } else if (currentHour >= 4 && currentHour < 7) {
         body.style.backgroundImage = "url('bg_04_07.jpg')";
         document.getElementById("greetings").innerHTML = "Good morning. <br>A new day is about to begin.";
-    } else if (currentHour >= 16 && currentHour <= 19) {
-        body.style.backgroundImage = "url('bg_16_19.jpg')";
-        document.getElementById("greetings").innerHTML = "The day's coming to an end. <br>Now cherish the evening sunset.";
-    } else {
+    } else if (currentHour >= 7 && currentHour < 16) {
         body.style.backgroundImage = "url('bg_07_16.jpg')";
         document.getElementById("greetings").innerHTML = "May you have a fulfilling day.";
+    } else {
+        body.style.backgroundImage = "url('bg_16_19.jpg')";
+        document.getElementById("greetings").innerHTML = "The day's coming to an end. <br>Now cherish the evening sunset.";
     }
 
     function inputFocus(input) {
         input.style.backgroundColor = "white";
         input.style.borderColor = "#00AEEC";
     }
+
+    // Form validation
+    document.getElementById('loginForm').onsubmit = function(event) {
+        var username = document.getElementById('username').value;
+        var password = document.getElementById('password').value;
+        var warning = document.getElementById('warning');
+
+        if (username === "" || password === "") {
+            warning.innerText = "Username and password cannot be empty!";
+            warning.style.display = 'block';  // 显示警告信息
+            event.preventDefault(); // 阻止表单提交
+        } else {
+            warning.style.display = 'none';  // 隐藏警告信息
+        }
+    };
 </script>
 
 </body>
