@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Qiao Add Item</title>
-    <link rel="icon" href="qiao_logo.svg" type="image/x-icon">
+    <title>SwapSpot Admin Add Item</title>
+    <link rel="icon" href="SwapSpot_logo_small.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
 <style>
     body {
@@ -41,8 +41,7 @@
         text-align: center;
     }
     .add_item_admin-container input[type="text"],
-    .add_item_admin-container input[type="number"], 
-    .add_item_admin-container textarea, 
+    .add_item_admin-container input[type="number"],
     .add_item_admin-container button {
         width: 100%;
         margin-bottom: 10px;
@@ -71,7 +70,7 @@
 <body>
 <div class="main-container">
     <div class="add_item_admin-container">
-        <img src="qiao_logo.svg" style="width: 300px;">
+        <img src="SwapSpot_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Admin Add Item</h2>
         <form action="additem_sql_op.php" method="post">
@@ -79,12 +78,12 @@
             <input type="number" name="inventory" placeholder="Input the number we have" id="inventory" onfocus="inputFocus(this)" required>
             <input type="number" name="selling_price" placeholder="Input the dish price" id="selling_price" onfocus="inputFocus(this)" required>
             <input type="text" name="image_path" placeholder="Input Image Path" id="image_path" onfocus="inputfocus(this)" value="./" required>
-            <textarea type="text" name="ingredient" style="width: 100%;" placeholder="Input Ingredient" id="ingredient" onfocus="inputfocus(this)" required></textarea>
-            <textarea type="text" name="description" style="width: 100%;" placeholder="Input Description" id="description" onfocus="inputfocus(this)" required></textarea>
+            <textarea type="text" name="ingredient" placeholder="Input Ingredient" id="ingredient" onfocus="inputfocus(this)" required>
+            <textarea type="text" name="description" placeholder="Input Description" id="description" onfocus="inputfocus(this)" required>
             <button type="submit">Add</button>
         </form>
         <p>Back to <a href="Admin_pg.php" class="links">Admin Page</a></p>
-        <p>&copy;Copyright 2024 Qiao's Handmade. All rights reserved.</p>
+        <footer>&copy;Copyright 2024 Qiao's Handmade. All rights reserved.</footer>
     </div>
 </div>
 

@@ -140,13 +140,13 @@ if (isset($_SESSION['username'])) {
                 <!-- To be laid in the middle! -->
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="collection.svg" style="width: 40px;  ">
+                        <img src="collection.svg" style="width: 40px;">
                     </div>
                     <p>My Collections</p>
                 </div>
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="order_his.svg" style="width: 40px; ">
+                        <img src="order_his.svg" style="width: 40px;">
                     </div>
                     <p>My Orders</p>
                 </div>
@@ -247,29 +247,7 @@ if (isset($_SESSION['username'])) {
             <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
                 <?php foreach ($dishes as $dish): ?>
                     <div class="dish">
-                        <!-- Convert image from BLOB to Base64 and embed in img src -->
-                        <?php if ($dish['image']): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($dish['image']); ?>"
-                                 alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
-                                 loading="lazy"
-                                 oncontextmenu="return false"
-                                 onselectstart="return false"
-                                 ondragstart="return false"
-                                 onbeforecopy="return false"
-                                 oncopy="document.selection.empty()"
-                                 onselect="document.selection.empty()">
-                        <?php else: ?>
-                            <!-- Placeholder if no image is available -->
-                            <img src="./nodish.jpg"
-                                 alt="No Image Available"
-                                 loading="lazy"
-                                 oncontextmenu="return false"
-                                 onselectstart="return false"
-                                 ondragstart="return false"
-                                 onbeforecopy="return false"
-                                 oncopy="document.selection.empty()"
-                                 onselect="document.selection.empty()">
-                        <?php endif; ?>
+                        <img src="<?php echo $dish['image'] ? $dish['image'] : 'nodish.jpg'; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
                         <div class="dish-info">
                             <div class="name"><?php echo $dish['dish_name']; ?></div>
                             <div class="price"><?php echo '$' . $dish['price']; ?></div>
@@ -460,7 +438,7 @@ if (isset($_SESSION['username'])) {
     }
 
     // Event listener for "Add to Cart" buttons
-    /* document.querySelectorAll('.add-to-cart-button').forEach(button => {
+    document.querySelectorAll('.add-to-cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const dishElement = this.closest('.dish');
             const dishId = parseInt(dishElement.querySelector('.dish-info').dataset.dishId);
@@ -471,7 +449,6 @@ if (isset($_SESSION['username'])) {
             addToCart(dishId, dishName, price, image);
         });
     });
-    */
 
     // Load cart when page loads
     document.addEventListener('DOMContentLoaded', () => {
@@ -549,15 +526,15 @@ if (isset($_SESSION['username'])) {
 
     // To realize the place-an-order function (frmo add to cart to check out)
     // get button-id the customer has pressed
-    // const buttonId = button.id;
+    // const buttonId = button.id; 
     // the format of the buttons' id: "add-to-cart_[dish_id]"
     // extract dish_id
-    // const dishId = buttonId.split('_')[1];
+    // const dishId = buttonId.split('_')[1]; 
 
     document.querySelectorAll('.add-to-cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const dishId = this.id.split('_')[1];
-            // console.log(dishId);
+
             // Using AJAX Requests to send dishId to PHP Scripts
             fetch('add_cart_s-information.php', {
                 method: 'POST',
@@ -566,20 +543,21 @@ if (isset($_SESSION['username'])) {
                 },
                 body: JSON.stringify({ dish_id: dishId })
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        console.error(data.error);
-                    } else {
-                        const dishName = data.dish_name;
-                        const dishPrice = data.price;
-                        // test shopping cart
-                        console.log(`Dish added: ${dishName}, Price: ${dishPrice}`);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                } else {
+                    const dishName = data.dish_name;
+                    const dishPrice = data.price;
+
+                    // test shopping cart
+                    console.log(`Dish added: ${dishName}, Price: ${dishPrice}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         });
     });
 
