@@ -44,7 +44,7 @@ if (!empty($dishes)) {
     echo "<div style='margin-left: auto; margin-right: auto; text-align: center; width: 100%; '><h2 style='text-align: center; '>Admin Page</h2>";
     echo "<h3 style='text-align: center; color: #ff6699; '>After editing, please click <span style='font-weight: bolder; font-size:150%; color: #00aeec; '>Confirm</span> button to save changes.</h3>";
     echo "<div><table id='inventoryTable' style='border: 5px #00aeec solid; border-radius: 8px; '>";
-    
+
     // Print the heading of table
     echo "<tr>";
     foreach (['dish_id', 'dish_name', 'ingredient', 'discription', 'type', 'amount', 'note', 'image'] as $column) {
@@ -57,7 +57,7 @@ if (!empty($dishes)) {
     foreach ($dishes as $row) {
         echo "<tr>";
         for ($f = 0; $f < 7; $f++) { // 7 columns excluding image
-            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '>" . $row[$f] . "</td>";
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><div style='overflow: hidden; display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; '>" . htmlspecialchars($row[array_keys($row)[$f]] ?? '') . "</div></td>";
         }
         // Handle image field
         if (isset($row['image'])) {
@@ -70,16 +70,36 @@ if (!empty($dishes)) {
     }
 
     echo "</table></div></div>";
-    
+
     // Pagination links
-    echo "<div style='text-align: center; margin: 15px; '>";
-    for ($i = 1; $i <= $totalPages; $i++) {
-        echo "<a href='?page=$i' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; '>$i</a>";
+    echo "<div style='text-align: center; margin: 15px; '>Pages: ";
+
+    $visiblePages = 5; 
+    $firstPage = 1;
+    $lastPage = $totalPages;
+
+    echo "<a href='?page=1' style='text-decoration: none; padding: 5px; margin: 5px; background-color: #007bff; color: white; border-radius: 5px;'>1</a>";
+
+    if ($page > $visiblePages + 1) {
+        echo "<span style='padding: 5px; margin: 5px;'>...</span>";
     }
-    echo "</div>";
+
+    for ($i = max(1, $page - $visiblePages); $i <= min($totalPages, $page + $visiblePages); $i++) {
+        echo "<a href='?page=$i' style='text-decoration: none; padding: 5px; margin: 5px; background-color: " . ($i == $page ? '#007bff' : '#333') . "; color: white; border-radius: 5px;'>" . $i . "</a>";
+    }
+
+    if ($page < $totalPages - $visiblePages) {
+        echo "<span style='padding: 5px; margin: 5px;'>...</span>";
+    }
+
+    if ($totalPages > 1) {
+        echo "<a href='?page=$totalPages' style='text-decoration: none; padding: 5px; margin: 5px; background-color: #007bff; color: white; border-radius: 5px;'>$totalPages</a>";
+    }
+
+    echo "</div></div>";
 
     echo "<div style='text-align: center; margin: 15px; '><button style='border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' id='send' name='submit' value='confirm'>Confirm</button></div>";
-    
+
 } else {
     echo "<div style='text-align: center; margin: 15px; '>No dishes found</div>";
 }
@@ -92,7 +112,7 @@ if (!empty($dishes)) {
         var table = document.getElementById('inventoryTable');
         var rowCount = table.rows.length;
         var tableData = [];
-        
+
         // Loop through table rows and gather data
         for (var i = 1; i < rowCount; i++) {
             var row = table.rows[i];
@@ -128,7 +148,7 @@ if (!empty($dishes)) {
     function DeletRow(button) {
         if (confirm("Are you sure to delete this row?") == true) {
             let row = button.parentNode.parentNode;
-            var itemId = row.cells[0].innerText; 
+            var itemId = row.cells[0].innerText;
             row.parentNode.removeChild(row);
             $.ajax({
                 url: 'delete_item.php',
@@ -158,7 +178,7 @@ if (!empty($dishes)) {
                 cell.innerText = inputValue;
             }
         }
-    } 
+    }
 </script>
 </body>
 </html>
