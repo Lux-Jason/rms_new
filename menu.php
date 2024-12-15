@@ -96,7 +96,8 @@ $totalPages = ceil($total / $dishesPerPage);
     </div>
     <div>
         <button class="button login-btn" onclick="loginNotice()">Login</button>
-        <a href="#" class="button register-btn">register</a>
+        <button class="button register-btn" onclick="location.href=('register.php')">register</button>
+        <button class="button logout-btn" onclick="logout()">Logout</button>
     </div>
 </header>
 
@@ -108,9 +109,9 @@ $totalPages = ceil($total / $dishesPerPage);
             <button class="dropbtn">Notes&#8192;<span class="triangle-arrow">&#9652;</span>&#8192;</button>
             <div class="dropdown-content">
                 <a href="#" data-category="notes" data-value="">All</a>
-                <a href="#" data-category="notes" data-value="rd">recommended dishes</a>
-                <a href="#" data-category="notes" data-value="hpd">highly preferred dishes</a>
-                <a href="#" data-category="notes" data-value="ssd">specially selected dishes</a>
+                <a href="#" data-category="notes" data-value="r">recommended dishes</a>
+                <a href="#" data-category="notes" data-value="n">highly preferred dishes</a>
+                <a href="#" data-category="notes" data-value="s">specially selected dishes</a>
             </div>
         </div>
 
@@ -127,24 +128,12 @@ $totalPages = ceil($total / $dishesPerPage);
         </div>
 
         <div class="dropdown">
-            <button class="dropbtn">Content&#8192;<span class="triangle-arrow">&#9652;</span>&#8192;</button>
-            <div class="dropdown-content">
-                <a href="#" data-category="content" data-value="">All</a>
-                <a href="#" data-category="content" data-value="l100">less than 100g</a>
-                <a href="#" data-category="content" data-value="100200">100g to 200g</a>
-                <a href="#" data-category="content" data-value="200500">200g to 500g</a>
-                <a href="#" data-category="content" data-value="m500">more than 500g</a>
-                <a href="#" data-category="content" data-value="other">others</a>
-            </div>
-        </div>
-
-        <div class="dropdown">
             <button class="dropbtn">Dish Type&#8192;<span class="triangle-arrow">&#9652;</span>&#8192;</button>
             <div class="dropdown-content">
-                <a href="#" data-category="type" data-value="cd">Chinese Food</a>
-                <a href="#" data-category="type" data-value="wf">Western Food</a>
-                <a href="#" data-category="type" data-value="if">Indian Food</a>
-                <a href="#" data-category="type" data-value="other">Other types</a>
+                <a href="#" data-category="type" data-value="cf">Canton Food</a>
+                <a href="#" data-category="type" data-value="hf">Hunan Food</a>
+                <a href="#" data-category="type" data-value="sf">Sichuan Food</a>
+                <a href="#" data-category="type" data-value="wf">World Food</a>
             </div>
         </div>
 
@@ -173,19 +162,24 @@ $totalPages = ceil($total / $dishesPerPage);
 </div>
 
 <!-- Recommended Dishes -->
-<section class="dishes-display">
-    <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
-        <?php foreach ($dishes as $dish): ?>
-            <div class="dish">
-                <img src="<?php echo $dish['image']; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
-                <div class="dish-info">
-                    <div class="name"><?php echo $dish['dish_name']; ?></div>
-                    <div class="price"><?php echo '$' . $dish['price']; ?></div>
-                    <button class="add-to-cart-button">Add to Cart</button>
+<section class="recommended-dishes" style="margin-top: 0;">
+    <h2>Recommended Dishes</h2>
+    <section class="dishes-display">
+        <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
+            <?php foreach ($dishes as $dish): ?>
+                <div class="dish">
+                    <img src="<?php echo $dish['image'] ? $dish['image'] : 'nodish.jpg'; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
+                    <div class="dish-info">
+                        <div class="name"><?php echo $dish['dish_name']; ?></div>
+                        <div class="price"><?php echo '$' . $dish['price']; ?></div>
+                        <button class="add-to-cart-button" id="add-to-cart_<?php echo $dish['dish_id']; ?>">Add to Cart</button>
+                    </div>
+                    <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
+                    <!-- Hidden form to store the data of the item -->
                 </div>
-            </div>
-        <?php endforeach; ?>
-    </div>
+            <?php endforeach; ?>
+        </div>
+    </section>
 </section>
 
 <!-- Page Navigation -->
@@ -434,7 +428,7 @@ $totalPages = ceil($total / $dishesPerPage);
                 }
 
                 // Event listener for "Add to Cart" buttons
-                document.querySelectorAll('.add-to-cart-button').forEach(button => {
+                /* document.querySelectorAll('.add-to-cart-button').forEach(button => {
                     button.addEventListener('click', function() {
                         const dishElement = this.closest('.dish');
                         const dishId = parseInt(dishElement.querySelector('.dish-info').dataset.dishId);
@@ -445,6 +439,7 @@ $totalPages = ceil($total / $dishesPerPage);
                         addToCart(dishId, dishName, price, image);
                     });
                 });
+                */
 
                 // Load cart when page loads
                 document.addEventListener('DOMContentLoaded', () => {
@@ -463,6 +458,20 @@ $totalPages = ceil($total / $dishesPerPage);
                     document.getElementById("username").style.backgroundColor = "white";
                     document.getElementById("password").style.backgroundColor = "white";
                 }
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    if (isLoggedIn) {
+                        document.querySelector('.logout-btn').style.display = 'block';
+                        document.querySelector('.login-btn').style.display = 'none';
+                        document.querySelector('.register-btn').style.display = 'none';
+                    } else {
+                        document.querySelector('.logout-btn').style.display = 'none';
+                    }
+                });
+
+            function logout() {
+                window.location.href = 'logout.php';
+            }
 
         document.addEventListener('DOMContentLoaded', (event) => {
             const backToTopButton = document.getElementById('back-to-top');
@@ -491,9 +500,39 @@ $totalPages = ceil($total / $dishesPerPage);
             }
         });
 
-                // Initialize the page
-                loadDishesForPage(currentPage);
-            </script>
+        // Initialize the page
+        loadDishesForPage(currentPage);
+        
+        document.querySelectorAll('.add-to-cart-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const dishId = this.id.split('_')[1];
+                // console.log(dishId); 
+                // Using AJAX Requests to send dishId to PHP Scripts
+                fetch('add_cart_s-information.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ dish_id: dishId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error(data.error);
+                    } else {
+                        const dishName = data.dish_name; 
+                        const dishPrice = data.price; 
+                        // test shopping cart
+                        console.log(`Dish added: ${dishName}, Price: ${dishPrice}`); 
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+
+        </script>
 
 </body>
 </html>

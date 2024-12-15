@@ -140,13 +140,13 @@ if (isset($_SESSION['username'])) {
                 <!-- To be laid in the middle! -->
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="collection.svg" style="width: 40px;">
+                        <img src="collection.svg" style="width: 40px;  ">
                     </div>
                     <p>My Collections</p>
                 </div>
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="order_his.svg" style="width: 40px;">
+                        <img src="order_his.svg" style="width: 40px; ">
                     </div>
                     <p>My Orders</p>
                 </div>
@@ -438,7 +438,7 @@ if (isset($_SESSION['username'])) {
     }
 
     // Event listener for "Add to Cart" buttons
-    document.querySelectorAll('.add-to-cart-button').forEach(button => {
+    /* document.querySelectorAll('.add-to-cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const dishElement = this.closest('.dish');
             const dishId = parseInt(dishElement.querySelector('.dish-info').dataset.dishId);
@@ -449,6 +449,7 @@ if (isset($_SESSION['username'])) {
             addToCart(dishId, dishName, price, image);
         });
     });
+    */
 
     // Load cart when page loads
     document.addEventListener('DOMContentLoaded', () => {
@@ -534,7 +535,7 @@ if (isset($_SESSION['username'])) {
     document.querySelectorAll('.add-to-cart-button').forEach(button => {
         button.addEventListener('click', function() {
             const dishId = this.id.split('_')[1];
-
+            // console.log(dishId); 
             // Using AJAX Requests to send dishId to PHP Scripts
             fetch('add_cart_s-information.php', {
                 method: 'POST',
@@ -559,6 +560,8 @@ if (isset($_SESSION['username'])) {
             });
         });
     });
+
+    
 
 </script>
 
