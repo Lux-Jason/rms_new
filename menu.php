@@ -177,10 +177,30 @@ $totalPages = ceil($total / $dishesPerPage);
     <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
         <?php foreach ($dishes as $dish): ?>
             <div class="dish">
-                <img src="<?php echo $dish['image']; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
+                <!-- Convert image from BLOB to Base64 and embed in img src -->
+                <?php if ($dish['image']): ?>
+                    <img src="data:image/jpeg;base64,<?php echo base64_encode($dish['image']); ?>"
+                         alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
+                         oncontextmenu="return false"
+                         onselectstart="return false"
+                         ondragstart="return false"
+                         onbeforecopy="return false"
+                         oncopy="document.selection.empty()"
+                         onselect="document.selection.empty()">
+                <?php else: ?>
+                    <!-- Placeholder if no image is available -->
+                    <img src="./nodish.jpg"
+                         alt="No Image Available"
+                         oncontextmenu="return false"
+                         onselectstart="return false"
+                         ondragstart="return false"
+                         onbeforecopy="return false"
+                         oncopy="document.selection.empty()"
+                         onselect="document.selection.empty()">
+                <?php endif; ?>
                 <div class="dish-info">
-                    <div class="name"><?php echo $dish['dish_name']; ?></div>
-                    <div class="price"><?php echo '$' . $dish['price']; ?></div>
+                    <div class="name"><?php echo htmlspecialchars($dish['dish_name']); ?></div>
+                    <div class="price"><?php echo '$' . number_format($dish['price'], 2); ?></div>
                     <button class="add-to-cart-button">Add to Cart</button>
                 </div>
             </div>

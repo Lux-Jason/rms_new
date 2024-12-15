@@ -575,3 +575,9 @@ footer {
 .logout-btn {
     display: none;
 }
+.dishes-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
