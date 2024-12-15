@@ -19,269 +19,274 @@ if (isset($_SESSION['username'])) {
     echo "<script>var isLoggedIn = false;</script>";
 }
 ?>
-    <!-- Header -->
-    <header>
-        <div class="logo-container">
-            <div style="width: 20px;"></div>
-            <a href="index.php"><img src="qiao_logo.svg" alt="Qiao's Handmade" class="logo"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()></a>
-            <div style="width: 20px;"></div>
-            <nav>
-                <a href="index.php" class="button" style="color: #007bff; background-color: white;">Home</a>
-                <a href="menu.php" class="button">All Dishes</a>
-            </nav>
-        </div>
-        <div>
-            <button class="button login-btn" onclick="loginNotice()">Login</button>
-            <button class="button register-btn" onclick="location.href=('register.php')">register</button>
-        </div>
-    </header>
+<!-- Header -->
+<header>
+    <div class="logo-container">
+        <div style="width: 20px;"></div>
+        <a href="index.php"><img src="qiao_logo.svg" alt="Qiao's Handmade" class="logo"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()></a>
+        <div style="width: 20px;"></div>
+        <nav>
+            <a href="index.php" class="button" style="color: #007bff; background-color: white;">Home</a>
+            <a href="menu.php" class="button">All Dishes</a>
+        </nav>
+    </div>
+    <div>
+        <button class="button login-btn" onclick="loginNotice()">Login</button>
+        <button class="button register-btn" onclick="location.href=('register.php')">register</button>
+    </div>
+</header>
 
-    <div id="reserved_area" style="height: 32px;"></div>
+<div id="reserved_area" style="height: 32px;"></div>
 
 
-    <div class="content">
-        <div id="mp_functions">
+<div class="content">
+    <div id="mp_functions">
 
-            <div class="type-container_mp" style="border-radius: 24px;">
-                <!-- Here is a tab area, four options in order from the top to the bottom of the row, used to display the distribution of the meal, the tab is clicked to jump to the Type page and filtering operations, the left side of the tab for the product image, the right side of the text description -->
-                <div class="type_mp_single" onclick="location.href=('#')">
-                    <img src="yuecai.jpg" alt="yuecai" style="height: 92.5px; border-radius: 24px; margin-right: 5px;">
-                    <div class="type_mp_single_text">
-                        <p class="type_name">Canton Food</p>
-                        <p class="type_description">Cantonese cuisine emphasizes freshness and delicate flavors. </p>
-                    </div>
-                </div>
-                <div class="type_mp_single" onclick="location.href=('#')">
-                    <img src="xiangcai.jpg" alt="xiangcai" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
-                    <div class="type_mp_single_text">
-                        <p class="type_name">Hunan Food</p>
-                        <p class="type_description">Hunan cuisine is known for its bold and spicy flavors. </p>
-                    </div>
-                </div>
-                <div class="type_mp_single" onclick="location.href=('#')">
-                    <img src="chuancai.jpg" alt="Image3" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
-                    <div class="type_mp_single_text">
-                        <p class="type_name">Sichuan Food</p>
-                        <p class="type_description">Sichuan cuisine is famous its numbing spiciness and rich flavor. </p>
-                    </div>
-                </div>
-                <div class="type_mp_single" onclick="location.href=('#')">
-                    <img src="worldfood.jpg" alt="Image4" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
-                    <div class="type_mp_single_text">
-                        <p class="type_name">Foreign Food</p>
-                        <p class="type_description">We also serve food from all over the world. You can find your home here. </p>
-                    </div>
+        <div class="type-container_mp" style="border-radius: 24px;">
+            <!-- Here is a tab area, four options in order from the top to the bottom of the row, used to display the distribution of the meal, the tab is clicked to jump to the Type page and filtering operations, the left side of the tab for the product image, the right side of the text description -->
+            <div class="type_mp_single" onclick="location.href=('#')">
+                <img src="yuecai.jpg" alt="yuecai" style="height: 92.5px; border-radius: 24px; margin-right: 5px;">
+                <div class="type_mp_single_text">
+                    <p class="type_name">Canton Food</p>
+                    <p class="type_description">Cantonese cuisine emphasizes freshness and delicate flavors. </p>
                 </div>
             </div>
-
-            <!-- Slideshow -->
-            <div class="slideshow-container" style="border-radius: 24px">
-                <div class="mySlides fade">
-                    <img src="Qiao's Handmade pst1.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                </div>
-                <div class="mySlides fade">
-                    <img src="Qiao's Handmade pst2.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
-                </div>
-                <div class="mySlides fade">
-                    <img src="Qiao's Handmade pst3.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
+            <div class="type_mp_single" onclick="location.href=('#')">
+                <img src="xiangcai.jpg" alt="xiangcai" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
+                <div class="type_mp_single_text">
+                    <p class="type_name">Hunan Food</p>
+                    <p class="type_description">Hunan cuisine is known for its bold and spicy flavors. </p>
                 </div>
             </div>
-
-            <div class="personal_model" style="border-radius: 24px;">
-                <!-- Here is a personal-related functional areas, the upper half of the login-related functions and personal account-related information (this module can be expressed in div, do not have to write the function), the lower half is divided into the favourites, the order history of the functionality of the portal -->
-                <div class="personal_model_top">
-                    <!-- Account Functions -->
-                    <div style="width: 100%; height: 15px;"></div>
-                    <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
-                        <div style="border: 0.5px #33333330 solid; width: 60px; height: 60px; border-radius: 30px; overflow: hidden;"><img src="profile_photo.jpeg" width="60px" height="60px"></div>
-                        <div>
-                            <p style="font-size: 150%; font-weight: bolder; margin: 0; margin-left: 5px;">Good afternoon</p>
-                            <p style="margin: 0; margin-left: 5px;"><a href="register.php" style="text-decoration: none; color: #888;">Register</a></p>
-                        </div>
-                    </div>
-                    <!-- Account Information -->
-                    <!-- reserved area -->
-                    <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                        <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">Login to experience more. </p>
-                        <p style="text-align: center; margin-top: 3px; color: #888;">You can use your VIP after logged in. </p>
-                    </div>
-                    <button class="button login-btn" onclick="loginNotice()" style="width: 100%; font-size: 120%; font-weight: bolder;">Login</button>
+            <div class="type_mp_single" onclick="location.href=('#')">
+                <img src="chuancai.jpg" alt="Image3" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
+                <div class="type_mp_single_text">
+                    <p class="type_name">Sichuan Food</p>
+                    <p class="type_description">Sichuan cuisine is famous its numbing spiciness and rich flavor. </p>
                 </div>
-                <div style="width: 100%; height: 12px;"></div>
-                <div class="account-balance_mp">
-                    <p style="text-align: center; font-size: 108%; font-weight: bold; margin-top: 3px;">Account Balance</p>
-                    <p style="text-align: center; font-size: 200%; font-weight: lighter; margin-top: 8px; color: #AAA; margin-bottom: 12px;">$88.88</p>
-                </div>
-                <div class="personal_model_bottom" style="display: flex; margin: 3px; border-radius: 24px;">
-                    <!-- To be laid in the middle! -->
-                    <div class="personal-functions-buttons_mp">
-                        <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                            <img src="collection.svg" style="width: 40px;">
-                        </div>
-                        <p>My Collections</p>
-                    </div>
-                    <div class="personal-functions-buttons_mp">
-                        <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                            <img src="order_his.svg" style="width: 40px;">
-                        </div>
-                        <p>My Orders</p>
-                    </div>
+            </div>
+            <div class="type_mp_single" onclick="location.href=('#')">
+                <img src="worldfood.jpg" alt="Image4" style="width: 92.5px; border-radius: 24px; margin-right: 5px;">
+                <div class="type_mp_single_text">
+                    <p class="type_name">Foreign Food</p>
+                    <p class="type_description">We also serve food from all over the world. You can find your home here. </p>
                 </div>
             </div>
         </div>
 
-        <!-- Login Modal -->
-        <div id="loginModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeLoginModal()">&times;</span>
-                <h2>Login</h2>
-                <form action="logincheck_users.php" method="post"> <!-- Change action to login.php -->
-                    <input type="text" name="username" placeholder="User Name" id="username" onfocus="inputFocus(this)" required>
-                    <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
-                    <button type="submit" onclick="location.href=('logincheck_users.php')">Login</button>
-                </form>
-                <p><a href="#">Forget password? </a></p>
-                <p>Haven't got an account? <a href="register.php">register</a></p>
+        <!-- Slideshow -->
+        <div class="slideshow-container" style="border-radius: 24px">
+            <div class="mySlides fade">
+                <img src="Qiao's Handmade pst1.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
+            </div>
+            <div class="mySlides fade">
+                <img src="Qiao's Handmade pst2.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
+            </div>
+            <div class="mySlides fade">
+                <img src="Qiao's Handmade pst3.png" style="width:100%; border-radius: 24px; height: 400px;"  oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy=document.selection.empty() onselect=document.selection.empty()>
             </div>
         </div>
 
-<?php
-include 'connectdb.php';
-$dishesPerPage = 12;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $dishesPerPage;
-
-$filters = array();
-$params = array();
-
-// Handle search keyword
-if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
-    $filters[] = "dish_name LIKE :keyword OR description LIKE :keyword";
-    $params[':keyword'] = '%' . $_GET['keyword'] . '%';
-}
-
-// Handle notes filter
-if (isset($_GET['notes']) && $_GET['notes'] != '') {
-    $filters[] = "note = :note";
-    $params[':note'] = $_GET['notes'];
-}
-
-// Handle price filter
-if (isset($_GET['price']) && $_GET['price'] != '') {
-    switch ($_GET['price']) {
-        case 'l10':
-            $filters[] = "price < 10";
-            break;
-        case '1020':
-            $filters[] = "price BETWEEN 10 AND 20";
-            break;
-        // Add cases for other price ranges
-    }
-}
-
-// Handle content filter and dish type filter similarly
-
-// Construct the SQL query
-$sql = "SELECT * FROM menu";
-if (!empty($filters)) {
-    $sql .= " WHERE " . implode(" AND ", $filters);
-}
-$sql .= " LIMIT :offset, :limit";
-
-// Prepare and execute the statement
-$stmt = $conn->prepare($sql);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->bindValue(':limit', $dishesPerPage, PDO::PARAM_INT);
-foreach ($params as $key => $value) {
-    $stmt->bindValue($key, $value);
-}
-$stmt->execute();
-$dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Fetch total number of dishes
-$totalSql = "SELECT COUNT(*) AS total FROM menu";
-if (!empty($filters)) {
-    $totalSql .= " WHERE " . implode(" AND ", $filters);
-}
-$totalStmt = $conn->prepare($totalSql);
-foreach ($params as $key => $value) {
-    $totalStmt->bindValue($key, $value);
-}
-$totalStmt->execute();
-$total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total'];
-$totalPages = ceil($total / $dishesPerPage);
-?>
-
-        <!-- Recommended Dishes -->
-        <section class="recommended-dishes" style="margin-top: 0;">
-            <h2>Recommended Dishes</h2>
-            <section class="dishes-display">
-                <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
-                    <?php foreach ($dishes as $dish): ?>
-                        <div class="dish">
-                            <img src="<?php echo $dish['image'] ? $dish['image'] : 'nodish.jpg'; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
-                            <div class="dish-info">
-                                <div class="name"><?php echo $dish['dish_name']; ?></div>
-                                <div class="price"><?php echo '$' . $dish['price']; ?></div>
-                                <button class="add-to-cart-button">Add to Cart</button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+        <div class="personal_model" style="border-radius: 24px;">
+            <!-- Here is a personal-related functional areas, the upper half of the login-related functions and personal account-related information (this module can be expressed in div, do not have to write the function), the lower half is divided into the favourites, the order history of the functionality of the portal -->
+            <div class="personal_model_top">
+                <!-- Account Functions -->
+                <div style="width: 100%; height: 15px;"></div>
+                <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+                    <div style="border: 0.5px #33333330 solid; width: 60px; height: 60px; border-radius: 30px; overflow: hidden;"><img src="profile_photo.jpeg" width="60px" height="60px"></div>
+                    <div>
+                        <p style="font-size: 150%; font-weight: bolder; margin: 0; margin-left: 5px;">Good afternoon</p>
+                        <p style="margin: 0; margin-left: 5px;"><a href="register.php" style="text-decoration: none; color: #888;">Register</a></p>
+                    </div>
                 </div>
-            </section>
-        </section>
-
-        <!-- Cart and float experience -->
-
-        <div id="cart-float" onclick="openCart()" >
-            🛒
-        </div>
-
-        <!-- Back to top button -->
-        <button id="back-to-top" style="display: none;">&uarr;</button>
-
-        <div id="cartModal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeCartModal()">&times;</span>
-                <h2>My Cart</h2>
-                <div class="cart-items" id="cartItems">
-                    <!-- Cart items will be dynamically inserted here -->
+                <!-- Account Information -->
+                <!-- reserved area -->
+                <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                    <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">Login to experience more. </p>
+                    <p style="text-align: center; margin-top: 3px; color: #888;">You can use your VIP after logged in. </p>
                 </div>
-                <div class="cart-summary">
-                    <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
-                    <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
+                <button class="button login-btn" onclick="loginNotice()" style="width: 100%; font-size: 120%; font-weight: bolder;">Login</button>
+            </div>
+            <div style="width: 100%; height: 12px;"></div>
+            <div class="account-balance_mp">
+                <p style="text-align: center; font-size: 108%; font-weight: bold; margin-top: 3px;">Account Balance</p>
+                <p style="text-align: center; font-size: 200%; font-weight: lighter; margin-top: 8px; color: #AAA; margin-bottom: 12px;">$88.88</p>
+            </div>
+            <div class="personal_model_bottom" style="display: flex; margin: 3px; border-radius: 24px;">
+                <!-- To be laid in the middle! -->
+                <div class="personal-functions-buttons_mp">
+                    <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
+                        <img src="collection.svg" style="width: 40px;">
+                    </div>
+                    <p>My Collections</p>
+                </div>
+                <div class="personal-functions-buttons_mp">
+                    <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
+                        <img src="order_his.svg" style="width: 40px;">
+                    </div>
+                    <p>My Orders</p>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <!-- Other Information -->
-        <section class="other-information" style="color: #000000;">
-            <h2>About us</h2>
-            <div class="info-container">
-                <div class="info-box">
-                    <h3>Running Time: </h3>
-                    <p>Monday to Saturday<br>10:00 - 22:00</p>
-                </div>
-                <div class="info-box">
-                    <h3>Contact us: </h3>
-                    <p>Telephone: 19935820001</p>
-                    <p>E-mail: info@qiaohandmade.com</p>
-                </div>
-                <div class="info-box">
-                    <h3>Address: </h3>
-                    <p>BNU-UIC 2nd D5B-A111</p>
-                </div>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2>Login</h2>
+            <form action="logincheck_users.php" method="post"> <!-- Change action to login.php -->
+                <input type="text" name="username" placeholder="User Name" id="username" onfocus="inputFocus(this)" required>
+                <input type="password" name="password" placeholder="Password" id="password" onfocus="inputFocus(this)" required>
+                <button type="submit" onclick="location.href=('logincheck_users.php')">Login</button>
+            </form>
+            <p><a href="#">Forget password? </a></p>
+            <p>Haven't got an account? <a href="register.php">register</a></p>
+        </div>
+    </div>
+
+    <?php
+    include 'connectdb.php';
+    $dishesPerPage = 12;
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $offset = ($page - 1) * $dishesPerPage;
+
+    $filters = array();
+    $params = array();
+
+    // Always add the note filter for "r"
+    $filters[] = "note = :note";
+    $params[':note'] = 'r';
+
+    // Handle search keyword
+    if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
+        $filters[] = "dish_name LIKE :keyword OR description LIKE :keyword";
+        $params[':keyword'] = '%' . $_GET['keyword'] . '%';
+    }
+
+    // Handle notes filter
+    if (isset($_GET['notes']) && $_GET['notes'] != '') {
+        $filters[] = "note = :notes";
+        $params[':notes'] = $_GET['notes'];
+    }
+
+    // Handle price filter
+    if (isset($_GET['price']) && $_GET['price'] != '') {
+        switch ($_GET['price']) {
+            case 'l10':
+                $filters[] = "price < 10";
+                break;
+            case '1020':
+                $filters[] = "price BETWEEN 10 AND 20";
+                break;
+            // Add cases for other price ranges
+        }
+    }
+
+    // Handle content filter and dish type filter similarly
+
+    // Construct the SQL query
+    $sql = "SELECT * FROM menu";
+    if (!empty($filters)) {
+        $sql .= " WHERE " . implode(" AND ", $filters);
+    }
+    $sql .= " LIMIT :offset, :limit";
+
+    // Prepare and execute the statement
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindValue(':limit', $dishesPerPage, PDO::PARAM_INT);
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $stmt->execute();
+    $dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch total number of dishes
+    $totalSql = "SELECT COUNT(*) AS total FROM menu";
+    if (!empty($filters)) {
+        $totalSql .= " WHERE " . implode(" AND ", $filters);
+    }
+    $totalStmt = $conn->prepare($totalSql);
+    foreach ($params as $key => $value) {
+        $totalStmt->bindValue($key, $value);
+    }
+    $totalStmt->execute();
+    $total = $totalStmt->fetch(PDO::FETCH_ASSOC)['total'];
+    $totalPages = ceil($total / $dishesPerPage);
+    ?>
+
+    <!-- Recommended Dishes -->
+    <section class="recommended-dishes" style="margin-top: 0;">
+        <h2>Recommended Dishes</h2>
+        <section class="dishes-display">
+            <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
+                <?php foreach ($dishes as $dish): ?>
+                    <div class="dish">
+                        <img src="<?php echo $dish['image'] ? $dish['image'] : 'nodish.jpg'; ?>" alt="<?php echo $dish['dish_name']; ?>" oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onbeforecopy="return false" oncopy="document.selection.empty()" onselect="document.selection.empty()">
+                        <div class="dish-info">
+                            <div class="name"><?php echo $dish['dish_name']; ?></div>
+                            <div class="price"><?php echo '$' . $dish['price']; ?></div>
+                            <button class="add-to-cart-button">Add to Cart</button>
+                        </div>
+                        <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </section>
-        <div class="footer-content">
-            <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
-            <a href="admin.php">Admin Page</a>
+    </section>
+
+    <!-- Cart and float experience -->
+
+    <div id="cart-float" onclick="openCart()" >
+        🛒
+    </div>
+
+    <!-- Back to top button -->
+    <button id="back-to-top" style="display: none;">&uarr;</button>
+
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCartModal()">&times;</span>
+            <h2>My Cart</h2>
+            <div class="cart-items" id="cartItems">
+                <!-- Cart items will be dynamically inserted here -->
+            </div>
+            <div class="cart-summary">
+                <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
+                <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
+            </div>
         </div>
-    </footer>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+    <!-- Other Information -->
+    <section class="other-information" style="color: #000000;">
+        <h2>About us</h2>
+        <div class="info-container">
+            <div class="info-box">
+                <h3>Running Time: </h3>
+                <p>Monday to Saturday<br>10:00 - 22:00</p>
+            </div>
+            <div class="info-box">
+                <h3>Contact us: </h3>
+                <p>Telephone: 19935820001</p>
+                <p>E-mail: info@qiaohandmade.com</p>
+            </div>
+            <div class="info-box">
+                <h3>Address: </h3>
+                <p>BNU-UIC 2nd D5B-A111</p>
+            </div>
+        </div>
+    </section>
+    <div class="footer-content">
+        <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
+        <a href="admin.php">Admin Page</a>
+    </div>
+</footer>
 
 <script>
 

@@ -568,3 +568,6 @@ footer {
 .pagination button {
     border-radius: 15px;
 }
+.hidden-dishid {
+    display: none;
+}
