@@ -96,7 +96,8 @@ $totalPages = ceil($total / $dishesPerPage);
     </div>
     <div>
         <button class="button login-btn" onclick="loginNotice()">Login</button>
-        <a href="#" class="button register-btn">register</a>
+        <button class="button register-btn" onclick="location.href=('register.php')">register</button>
+        <button class="button logout-btn" onclick="logout()">Logout</button>
     </div>
 </header>
 
@@ -490,6 +491,20 @@ $totalPages = ceil($total / $dishesPerPage);
     function inputFocus(input) {
         document.getElementById("username").style.backgroundColor = "white";
         document.getElementById("password").style.backgroundColor = "white";
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (isLoggedIn) {
+            document.querySelector('.logout-btn').style.display = 'block';
+            document.querySelector('.login-btn').style.display = 'none';
+            document.querySelector('.register-btn').style.display = 'none';
+        } else {
+            document.querySelector('.logout-btn').style.display = 'none';
+        }
+    });
+
+    function logout() {
+        window.location.href = 'logout.php';
     }
 
     document.addEventListener('DOMContentLoaded', (event) => {
