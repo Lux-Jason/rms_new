@@ -571,3 +571,7 @@ footer {
 .hidden-dishid {
     display: none;
 }
+
+.logout-btn {
+    display: none;
+}
