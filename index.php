@@ -548,11 +548,10 @@ if (isset($_SESSION['username'])) {
                 if (data.error) {
                     console.error(data.error);
                 } else {
-                    const dishName = data.dish_name;
-                    const dishPrice = data.price;
-
+                    const dishName = data.dish_name; 
+                    const dishPrice = data.price; 
                     // test shopping cart
-                    console.log(`Dish added: ${dishName}, Price: ${dishPrice}`);
+                    console.log(`Dish added: ${dishName}, Price: ${dishPrice}`); 
                 }
             })
             .catch(error => {

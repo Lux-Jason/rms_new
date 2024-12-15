@@ -1,6 +1,7 @@
 <?php
+header('Content-Type: application/json');
 // Assuming I've got the dishId via JavaScript and passed it to PHP via AJAX or some other means
-$dishId = $_POST['dish_id']; // 从请求中获取dish_id
+$dishId = $_POST['dish_id']; // get dish_id
 
 include 'connectdb.php';
 
