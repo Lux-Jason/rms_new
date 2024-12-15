@@ -52,14 +52,14 @@ INSERT INTO `buyer` (`b_id`, `buyer_name`, `b_password`, `type`, `remains`) VALU
 
 DROP TABLE IF EXISTS `cashflow`;
 CREATE TABLE IF NOT EXISTS `cashflow` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `c_id` int NOT NULL AUTO_INCREMENT,
   `s_id` int NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `type` enum('income','expense') COLLATE utf8mb4_general_ci NOT NULL,
   `balance` decimal(10,2) NOT NULL,
   `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`c_id`),
   KEY `s_id` (`s_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `cashflow` (
 -- 转存表中的数据 `cashflow`
 --
 
-INSERT INTO `cashflow` (`id`, `s_id`, `amount`, `type`, `balance`, `date`, `description`) VALUES
+INSERT INTO `cashflow` (`c_id`, `s_id`, `amount`, `type`, `balance`, `date`, `description`) VALUES
 (1, 5, 1000.00, 'income', 1000.00, '2024-12-15 01:11:51', 'Received payment from customer'),
 (2, 5, 500.00, 'expense', 500.00, '2024-12-15 01:11:51', 'Paid supplier for goods');
 
