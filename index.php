@@ -33,6 +33,7 @@ if (isset($_SESSION['username'])) {
     <div>
         <button class="button login-btn" onclick="loginNotice()">Login</button>
         <button class="button register-btn" onclick="location.href=('register.php')">register</button>
+        <button class="button logout-btn" onclick="logout()">Logout</button>
     </div>
 </header>
 
@@ -90,27 +91,49 @@ if (isset($_SESSION['username'])) {
         <div class="personal_model" style="border-radius: 24px;">
             <!-- Here is a personal-related functional areas, the upper half of the login-related functions and personal account-related information (this module can be expressed in div, do not have to write the function), the lower half is divided into the favourites, the order history of the functionality of the portal -->
             <div class="personal_model_top">
-                <!-- Account Functions -->
-                <div style="width: 100%; height: 15px;"></div>
-                <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
-                    <div style="border: 0.5px #33333330 solid; width: 60px; height: 60px; border-radius: 30px; overflow: hidden;"><img src="profile_photo.jpeg" width="60px" height="60px"></div>
-                    <div>
-                        <p style="font-size: 150%; font-weight: bolder; margin: 0; margin-left: 5px;">Good afternoon</p>
-                        <p style="margin: 0; margin-left: 5px;"><a href="register.php" style="text-decoration: none; color: #888;">Register</a></p>
+                <?php
+                if (isset($_SESSION["username"])) {
+                    $username = $_SESSION["username"];
+                    $type = $_SESSION['type'];
+                    echo '<!-- Account Functions -->
+                    <div style="width: 100%; height: 15px;"></div>
+                    <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+                        <div style="border: 0.5px #33333330 solid; width: 60px; height: 60px; border-radius: 30px; overflow: hidden;"><img src="profile_photo.jpeg" width="60px" height="60px"></div>
+                        <div>
+                            <p style="font-size: 150%; font-weight: bolder; margin: 0; margin-left: 5px;">Good afternoon</p>
+                            <p style="margin: 0; margin-left: 5px;">'.$username.'</p>
+                        </div>
                     </div>
-                </div>
-                <!-- Account Information -->
-                <!-- reserved area -->
-                <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                    <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">Login to experience more. </p>
-                    <p style="text-align: center; margin-top: 3px; color: #888;">You can use your VIP after logged in. </p>
-                </div>
-                <button class="button login-btn" onclick="loginNotice()" style="width: 100%; font-size: 120%; font-weight: bolder;">Login</button>
+                    <!-- Account Information -->
+                    <!-- reserved area -->
+                    <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                        <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">You are'.$type.' user. </p>
+                        <p style="text-align: center; margin-top: 3px; color: #888;">You can experience our excellent dining experience. </p>
+                    </div>
+                    <button class="button logout-btn" onclick="logout()" style="width: 100%; font-size: 120%; font-weight: bolder; display: block; ">Logout</button>';
+                } else {
+                    echo '<!-- Account Functions -->
+                    <div style="width: 100%; height: 15px;"></div>
+                    <div style="display: flex; width: 100%; align-items: center; justify-content: center;">
+                        <div style="border: 0.5px #33333330 solid; width: 60px; height: 60px; border-radius: 30px; overflow: hidden;"><img src="profile_photo.jpeg" width="60px" height="60px"></div>
+                        <div>
+                            <p style="font-size: 150%; font-weight: bolder; margin: 0; margin-left: 5px;">Good afternoon</p>
+                            <p style="margin: 0; margin-left: 5px;"><a href="register.php" style="text-decoration: none; color: #888;">Register</a></p>
+                        </div>
+                    </div>
+                    <!-- Account Information -->
+                    <!-- reserved area -->
+                    <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                        <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">Login to experience more. </p>
+                        <p style="text-align: center; margin-top: 3px; color: #888;">You can use your VIP after logged in. </p>
+                    </div>
+                    <button class="button login-btn" onclick="loginNotice()" style="width: 100%; font-size: 120%; font-weight: bolder;">Login</button>';
+                } ?>
             </div>
             <div style="width: 100%; height: 12px;"></div>
             <div class="account-balance_mp">
                 <p style="text-align: center; font-size: 108%; font-weight: bold; margin-top: 3px;">Account Balance</p>
-                <p style="text-align: center; font-size: 200%; font-weight: lighter; margin-top: 8px; color: #AAA; margin-bottom: 12px;">$88.88</p>
+                <p style="text-align: center; font-size: 200%; font-weight: lighter; margin-top: 8px; color: #AAA; margin-bottom: 12px;"><?php if (isset($_SESSION["username"])) {$remains = $_SESSION['remains']; echo '$'.$remains; } else {echo '$88.88';} ?></p>
             </div>
             <div class="personal_model_bottom" style="display: flex; margin: 3px; border-radius: 24px;">
                 <!-- To be laid in the middle! -->
@@ -485,6 +508,19 @@ if (isset($_SESSION['username'])) {
         }
     });
 
+    document.addEventListener("DOMContentLoaded", function() {
+        if (isLoggedIn) {
+            document.querySelector('.logout-btn').style.display = 'block';
+            document.querySelector('.login-btn').style.display = 'none';
+            document.querySelector('.register-btn').style.display = 'none';
+        } else {
+            document.querySelector('.logout-btn').style.display = 'none';
+        }
+    });
+
+    function logout() {
+        window.location.href = 'logout.php';
+    }
 </script>
 
 </body>
