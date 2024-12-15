@@ -89,6 +89,12 @@ function verifyCSRFToken($token) {
     return $token === $_SESSION['csrf_token'];
 }
 
+// Check if user is already logged in and redirect to backstage page
+if (isset($_SESSION['username'])) {
+    header("Location: backstage.php");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get form input
     $s_name = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
@@ -152,4 +158,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         document.getElementById("greetings").innerHTML = "The day's coming to an end. <br>Now cherish the evening sunset.";
     } else {
         body.style.backgroundImage = "url('bg_07_16.jpg')";
-        document
+        document.getElementById("greetings").innerHTML = "Good afternoon! <br>Hope you're having a great day!";
+    }
+
+    function inputFocus(input) {
+        input.style.borderColor = "#007bff";
+    }
+</script>
+
+</body>
+</html>

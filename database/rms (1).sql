@@ -186,6 +186,26 @@ END
 $$
 DELIMITER ;
 
+--
+DROP TRIGGER IF EXISTS `insert_operate_after_status_ordered`;
+DELIMITER $$
+CREATE TRIGGER `insert_operate_after_status_ordered`
+    AFTER UPDATE ON `order_detail`
+    FOR EACH ROW
+BEGIN
+
+    IF OLD.status != 'ordered' AND NEW.status = 'ordered' THEN
+
+        INSERT INTO `operate` (`s_id`, `dish_id`, `order_id`)
+        VALUES
+            (1,
+             NEW.dish_id,
+             NEW.order_id
+            );
+    END IF;
+END $$
+DELIMITER ;
+--
 -- --------------------------------------------------------
 
 --

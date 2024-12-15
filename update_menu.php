@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!-- HTML 表单 -->
-<form action="updatemenu.php" method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data">
     <label for="dish_name">Dish Name:</label>
     <input type="text" id="dish_name" name="dish_name" required><br><br>
 
