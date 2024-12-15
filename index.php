@@ -91,6 +91,7 @@ if (isset($_SESSION['username'])) {
         <div class="personal_model" style="border-radius: 24px;">
             <!-- Here is a personal-related functional areas, the upper half of the login-related functions and personal account-related information (this module can be expressed in div, do not have to write the function), the lower half is divided into the favourites, the order history of the functionality of the portal -->
             <div class="personal_model_top">
+                <!-- You shall logout then login to assure the correctly performance of the program. -->
                 <?php
                 if (isset($_SESSION["username"])) {
                     $username = $_SESSION["username"];
@@ -107,7 +108,7 @@ if (isset($_SESSION['username'])) {
                     <!-- Account Information -->
                     <!-- reserved area -->
                     <div style="width: 100%;" style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                        <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">You are'.$type.' user. </p>
+                        <p style="text-align: center; font-size: 120%; font-weight: bolder; margin-bottom: 3px; color: #333;">You are '.$type.' user. </p>
                         <p style="text-align: center; margin-top: 3px; color: #888;">You can experience our excellent dining experience. </p>
                     </div>
                     <button class="button logout-btn" onclick="logout()" style="width: 100%; font-size: 120%; font-weight: bolder; display: block; ">Logout</button>';
@@ -250,9 +251,10 @@ if (isset($_SESSION['username'])) {
                         <div class="dish-info">
                             <div class="name"><?php echo $dish['dish_name']; ?></div>
                             <div class="price"><?php echo '$' . $dish['price']; ?></div>
-                            <button class="add-to-cart-button">Add to Cart</button>
+                            <button class="add-to-cart-button" id="add-to-cart_<?php echo $dish['dish_id']; ?>">Add to Cart</button>
                         </div>
                         <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
+                        <!-- Hidden form to store the data of the item -->
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -521,6 +523,44 @@ if (isset($_SESSION['username'])) {
     function logout() {
         window.location.href = 'logout.php';
     }
+
+    // To realize the place-an-order function (frmo add to cart to check out)
+    // get button-id the customer has pressed
+    // const buttonId = button.id; 
+    // the format of the buttons' id: "add-to-cart_[dish_id]"
+    // extract dish_id
+    // const dishId = buttonId.split('_')[1]; 
+
+    document.querySelectorAll('.add-to-cart-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const dishId = this.id.split('_')[1];
+
+            // Using AJAX Requests to send dishId to PHP Scripts
+            fetch('add_cart_s-information.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dish_id: dishId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error(data.error);
+                } else {
+                    const dishName = data.dish_name;
+                    const dishPrice = data.price;
+
+                    // test shopping cart
+                    console.log(`Dish added: ${dishName}, Price: ${dishPrice}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+
 </script>
 
 </body>
