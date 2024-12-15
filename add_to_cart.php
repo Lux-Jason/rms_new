@@ -1,34 +1,29 @@
 <?php
-session_start();
-include 'connectdb.php';  // Include the database connection
+include 'connectdb.php';
 
-// Get the current buyer ID from session or use a default for testing
-$buyer_id = $_SESSION['buyer_id'] ?? 1;
-$data = json_decode(file_get_contents("php://input"), true);
+// 获取请求的参数
+$dishId = isset($_POST['dish_id']) ? (int)$_POST['dish_id'] : 0;
+$dishName = isset($_POST['dish_name']) ? $_POST['dish_name'] : '';
+$dishPrice = isset($_POST['dish_price']) ? (float)$_POST['dish_price'] : 0.0;
+$buyerId = isset($_POST['buyer_id']) ? (int)$_POST['buyer_id'] : 0;
 
-$dish_id = $data['dishId'];
-$quantity = $data['quantity'];
-
-// Check if the dish is already in the cart
-$query = "SELECT * FROM order_detail WHERE order_id = (SELECT order_id FROM `order` WHERE b_id = ?) AND dish_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("ii", $buyer_id, $dish_id);
+// 1. 创建新的订单（如果尚未存在）
+$sql = "INSERT INTO `order` (b_id, time) VALUES (:buyer_id, NOW())";
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':buyer_id', $buyerId, PDO::PARAM_INT);
 $stmt->execute();
-$result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    // Update the quantity if the dish is already in the cart
-    $query = "UPDATE order_detail SET num_dishes = num_dishes + ? WHERE order_id = (SELECT order_id FROM `order` WHERE b_id = ?) AND dish_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("iii", $quantity, $buyer_id, $dish_id);
-    $stmt->execute();
-} else {
-    // Insert the dish into the order_detail table if it's not already in the cart
-    $query = "INSERT INTO order_detail (order_id, dish_id, num_dishes, price) SELECT order_id, ?, ?, price FROM `order` WHERE b_id = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("iii", $dish_id, $quantity, $buyer_id);
-    $stmt->execute();
-}
+// 获取刚刚插入的订单 ID
+$orderId = $conn->lastInsertId();
 
-echo json_encode(['success' => true]);
-?>
+// 2. 在 `order_detail` 中插入菜品
+$sqlDetail = "INSERT INTO `order_detail` (order_id, dish_id, num_dishes, price, status) 
+              VALUES (:order_id, :dish_id, 1, :price, 'added')";
+$stmtDetail = $conn->prepare($sqlDetail);
+$stmtDetail->bindValue(':order_id', $orderId, PDO::PARAM_INT);
+$stmtDetail->bindValue(':dish_id', $dishId, PDO::PARAM_INT);
+$stmtDetail->bindValue(':price', $dishPrice, PDO::PARAM_STR);
+$stmtDetail->execute();
+
+// 返回响应
+echo json_encode(['status' => 'success', 'order_id' => $orderId]);

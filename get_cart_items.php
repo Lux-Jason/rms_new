@@ -17,7 +17,7 @@ $query = "SELECT menu.dish_id, menu.dish_name, menu.price, menu.image, order_det
           FROM menu
           JOIN order_detail ON menu.dish_id = order_detail.dish_id
           JOIN `order` ON order_detail.order_id = `order`.order_id
-          WHERE order_detail.b_id = $userId AND order_detail.status = 'in_cart'"; // Assuming 'in_cart' status
+          WHERE order_detail.b_id = $userId AND order_detail.status = 'inprogress'"; // Assuming 'in_cart' status
 $result = mysqli_query($conn, $query);
 
 $cartItems = [];

@@ -1,189 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .pagination {
-            margin-top: 20px;
-        }
-        .pagination a {
-            cursor: pointer;
-        }
-    </style>
+    <title>Admin Page</title>
+    <script src="./jquery.min.js"></script>
+    <link rel="icon" href="qiao_logo.svg" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-
 <?php
+include "connectdb.php";
 
-include'connectdb.php';
+// Define filters and pagination parameters
+$filters = []; // e.g., ["category = 'appetizer'", "price < 20"]
+$params = []; // e.g., [':category' => 'appetizer', ':price' => 20]
+$dishesPerPage = 100; // Number of records per page
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$offset = ($page - 1) * $dishesPerPage;
 
-// pagination.php
-function getDishes($page, $perPage, $searchKeyword = null) {
-    global $conn;
-    $start = ($page - 1) * $perPage;
-    $sql = "SELECT * FROM menu WHERE dish_name LIKE ? LIMIT $start, $perPage";
-    $result = $conn->query($sql);
+// Construct the SQL query for pagination
+$sql = "SELECT * FROM menu";
+if (!empty($filters)) {
+    $sql .= " WHERE " . implode(" AND ", $filters);
+}
+$sql .= " LIMIT :offset, :limit";
 
-    if ($searchKeyword) {
-        $sql = "SELECT * FROM menu WHERE dish_name LIKE '%$searchKeyword%' LIMIT $start, $perPage";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $searchKeyword);
-        $stmt->execute();
-        $result = $stmt->get_result();
+// Prepare and execute the statement
+$stmt = $conn->prepare($sql);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindValue(':limit', $dishesPerPage, PDO::PARAM_INT);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value);
+}
+$stmt->execute();
+$dishes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Count total dishes for pagination
+$totalDishes = $conn->query("SELECT COUNT(*) FROM menu")->fetchColumn();
+$totalPages = ceil($totalDishes / $dishesPerPage);
+
+if (!empty($dishes)) {
+    echo "<div style='margin-left: auto; margin-right: auto; text-align: center; width: 100%; '><h2 style='text-align: center; '>Admin Page</h2>";
+    echo "<h3 style='text-align: center; color: #ff6699; '>After editing, please click <span style='font-weight: bolder; font-size:150%; color: #00aeec; '>Confirm</span> button to save changes.</h3>";
+    echo "<div><table id='inventoryTable' style='border: 5px #00aeec solid; border-radius: 8px; '>";
+
+    // Print the heading of table
+    echo "<tr>";
+    foreach (['dish_id', 'dish_name', 'ingredient', 'discription', 'type', 'amount', 'note', 'image'] as $column) {
+        echo "<th style='width: 200px; text-align: center; border: 1px #00aeec solid; border-radius: 8px; '><span style='margin-top: 10px; margin-bottom: 10px; '>" . ucwords(str_replace('_', ' ', $column)) . "</span></th>";
+    }
+    echo "<th style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; '><span style='margin-top: 10px; margin-bottom: 10px; '>operation</span></th>";
+    echo "</tr>";
+
+    // Get each row data
+    foreach ($dishes as $row) {
+        echo "<tr>";
+        for ($f = 0; $f < 7; $f++) { // 7 columns excluding image
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '>" . htmlspecialchars($row[array_keys($row)[$f]] ?? '') . "</td>";
+        }
+        // Handle image field
+        if (isset($row['image'])) {
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' style='width: 175px; height: auto; '></td>";
+        } else {
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '>No Image</td>";
+        }
+        echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><button style='border: 1px white solid; border-radius: 5px; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' onclick=\"EditRow(this)\">Edit</button><br><button style='border: 1px white solid; border-radius: 5px; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' onclick=\"DeletRow(this)\">Delete</button></td>";
+        echo "</tr>";
     }
 
-    $dishes = [];
-    while ($row = $result->fetch_assoc()) {
-        $dishes[] = $row;
+    echo "</table></div></div>";
+
+    // Pagination links
+    echo "<div style='text-align: center; margin: 15px; '>";
+    for ($i = 1; $i <= $totalPages; $i++) {
+        echo "<a href='?page=$i' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; '>$i</a>";
     }
-    return $dishes;
-}
+    echo "</div>";
 
-function getTotalPages($perPage, $searchKeyword = null) {
-    global $conn;
-    $sql = "SELECT COUNT(*) FROM menu";
-    if ($searchKeyword) {
-        $sql = "SELECT COUNT(*) FROM menu WHERE dish_name LIKE '%$searchKeyword%'";
-    }
-    $result = $conn->query($sql);
-    $row = $result->fetch_row();
-    return ceil($row[0] / $perPage);
-}
+    echo "<div style='text-align: center; margin: 15px; '><button style='border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' id='send' name='submit' value='confirm'>Confirm</button></div>";
 
-function updateAmount($dishId, $newAmount) {
-    global $conn;
-    $sql = "UPDATE menu SET amount = ? WHERE dish_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $newAmount, $dishId);
-    $stmt->execute();
+} else {
+    echo "<div style='text-align: center; margin: 15px; '>No dishes found</div>";
 }
-
 ?>
-<h2>Menu</h2>
 
-<input type="text" id="searchKeyword" placeholder="Search dishes..." onkeyup="searchDishes(event)">
-
-<table>
-    <thead>
-        <tr>
-            <th>Dish Name</th>
-            <th>Price</th>
-            <th>Amount</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody id="menuTable">
-        <!-- Dishes will be loaded here -->
-    </tbody>
-</table>
-
-<div class="pagination" id="pagination">
-    <!-- Pagination buttons will be loaded here -->
-</div>
+<div style="text-align: center; margin: 15px; "><a href="add_new_item_admin.php" style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white;'>Add Item</a></div>
 
 <script>
-const perPage = 10; // Number of dishes per page
-let currentPage = 1;
+    function update() {
+        var table = document.getElementById('inventoryTable');
+        var rowCount = table.rows.length;
+        var tableData = [];
 
-function fetchDishes(page) {
-    fetch(`pagination.php?page=${page}&perPage=${perPage}`)
-        .then(response => response.json())
-        .then(data => {
-            const menuTable = document.getElementById('menuTable');
-            menuTable.innerHTML = '';
-            data.dishes.forEach(dish => {
-                const row = `<tr>
-                    <td>${dish.dish_name}</td>
-                    <td>${dish.price}</td>
-                    <td><input type="number" value="${dish.amount}" onchange="updateAmount(${dish.dish_id}, this.value)"></td>
-                    <td>${dish.description}</td>
-                </tr>`;
-                menuTable.innerHTML += row;
-            });
-            updatePagination(data.totalPages);
-        });
-}
-
-function updatePagination(totalPages) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = `<span onclick="fetchDishes(${i})">${i}</span>`;
-        pagination.innerHTML += pageButton + ' ';
-    }
-}
-
-function updateAmount(dishId, newAmount) {
-    fetch('update_amount.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `dishId=${dishId}&newAmount=${newAmount}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Amount updated successfully');
-        } else {
-            console.error('Failed to update amount');
+        // Loop through table rows and gather data
+        for (var i = 1; i < rowCount; i++) {
+            var row = table.rows[i];
+            var rowData = {};
+            for (var j = 0; j < row.cells.length - 2; j++) { // -2 to exclude the image and operation columns
+                rowData[j] = row.cells[j].innerText;
+            }
+            tableData.push(rowData);
         }
-    });
-}
 
-function fetchDishes(page, searchKeyword) {
-    fetch(`pagination.php?page=${page}&perPage=${perPage}&searchKeyword=${searchKeyword}`)
-        .then(response => response.json())
-        .then(data => {
-            const menuTable = document.getElementById('menuTable');
-            menuTable.innerHTML = '';
-            data.dishes.forEach(dish => {
-                const row = `<tr>
-                    <td>${dish.dish_name}</td>
-                    <td>${dish.price}</td>
-                    <td><input type="number" value="${dish.amount}" onchange="updateAmount(${dish.dish_id}, this.value)"></td>
-                    <td>${dish.description}</td>
-                </tr>`;
-                menuTable.innerHTML += row;
-            });
-            updatePagination(data.totalPages, searchKeyword);
+        // Send data to server
+        $.ajax({
+            url: 'process.php',
+            type: 'POST',
+            data: { data: tableData },
+            success: function(response) {
+                console.log('Response from PHP: ' + response);
+                alert('Database updated successfully!');
+                location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error occurred: ' + status + ' ' + error);
+            }
         });
-}
-
-function updatePagination(totalPages, searchKeyword) {
-    const pagination = document.getElementById('pagination');
-    pagination.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = `<span onclick="fetchDishes(${i}, '${searchKeyword}')">${i}</span>`;
-        pagination.innerHTML += pageButton + ' ';
     }
-}
 
-function searchDishes(event) {
-    if (event.key === 'Enter') {
-        const searchKeyword = document.getElementById('searchKeyword').value;
-        fetchDishes(currentPage, searchKeyword);
+    $(document).ready(function() {
+        $('#send').click(function() {
+            update();
+        });
+    });
+
+    function DeletRow(button) {
+        if (confirm("Are you sure to delete this row?") == true) {
+            let row = button.parentNode.parentNode;
+            var itemId = row.cells[0].innerText;
+            row.parentNode.removeChild(row);
+            $.ajax({
+                url: 'delete_item.php',
+                type: 'POST',
+                data: { id: itemId },
+                success: function(response) {
+                    alert('Item deleted successfully!');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error occurred: ' + status + ' ' + error);
+                }
+            });
+        } else {
+            alert("Operation cancelled! ");
+        }
     }
-}
 
-// Initial fetch
-fetchDishes(currentPage);
+    function EditRow(button) {
+        let row = button.parentNode.parentNode;
+        let cells = row.cells;
 
+        for (let i = 0; i < cells.length - 2; i++) { // -2 to exclude the image and operation columns
+            let cell = cells[i];
+            let inputValue = prompt("Please enter new value for " + cell.innerText, cell.innerText);
+            if (inputValue !== null && inputValue !== "") {
+                cell.innerText = inputValue;
+            }
+        }
+    }
 </script>
-
 </body>
 </html>
