@@ -147,13 +147,11 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `order_detail`;
 CREATE TABLE IF NOT EXISTS `order_detail` (
-  `detail_id` int NOT NULL AUTO_INCREMENT,
   `order_id` int NOT NULL,
   `dish_id` int NOT NULL,
   `num_dishes` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
   `status` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  PRIMARY KEY (`detail_id`),
   KEY `order_id` (`order_id`),
   KEY `dish_id` (`dish_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
