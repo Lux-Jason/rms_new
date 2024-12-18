@@ -8,7 +8,7 @@ $sp = $_POST["selling_price"]; //selling price.
 $bp = $_POST["buying_price"]; //buying price.
 $img_p = $_POST["image_path"]; //image path.
 
-$sql = "INSERT INTO `inventory` (`id`, `item`, `number_we_have`, `selling_price`, `buying_price`, `image_path`) VALUES (NULL, '$item', '$inventory', '$sp', '$bp', '$img_p')";
+$sql = "INSERT INTO `menu` (`dish_id`, `dish_name`, `ingredient`, `description`, `type`, `price`) VALUES (NULL, '$item', '$inventory', '$sp', '$bp', '$img_p')";
 
 $result = mysqli_query($conn, $sql);
 

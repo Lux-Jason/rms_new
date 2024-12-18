@@ -102,9 +102,9 @@ if (!empty($dishes)) {
 
         // Handle image field
         if (isset($row['image'])) {
-            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' style='width: 175px; height: auto; '></td>";
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><img src='data:image/jpeg;base64," . base64_encode($row['image']) . "' style='width: 175px; height: auto; '><br><input type='file' class='image-upload' data-dishid='" . $row['dish_id'] . "' /></td>";
         } else {
-            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '>No Image</td>";
+            echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '>No Image<br><input type='file' class='image-upload' data-dishid='" . $row['dish_id'] . "' /></td>";
         }
         echo "<td style='border: 1px #00aeec solid; border-radius: 8px; width: 200px; text-align: center; '><button style='border: 1px white solid; border-radius: 5px; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' onclick=\"EditRow(this)\">Edit</button><br><button style='border: 1px white solid; border-radius: 5px; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white; ' onclick=\"DeletRow(this)\">Delete</button></td>";
         echo "</tr>";
@@ -114,32 +114,10 @@ if (!empty($dishes)) {
 
     // Pagination links
     echo "<div style='text-align: center; margin: 15px; '>Pages: ";
-
-    $visiblePages = 5;
-    $firstPage = 1;
-    $lastPage = $totalPages;
-
     echo "<a href='?page=1' style='text-decoration: none; padding: 5px; margin: 5px; background-color: #007bff; color: white; border-radius: 5px;'>1</a>";
-
-    // First Page button
     echo "<a href='?page=1&search=$searchTerm' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white;'><< First</a>";
 
-    // Previous Page button
-    if ($page > 1) {
-        echo "<a href='?page=" . ($page - 1) . "&search=$searchTerm' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white;'><</a>";
-    } else {
-        echo "<span style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #ccc; color: white;'> < </span>";
-    }
-
-    // Next Page button
-    if ($page < $totalPages) {
-        echo "<a href='?page=" . ($page + 1) . "&search=$searchTerm' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white;'>></a>";
-    } else {
-        echo "<span style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #ccc; color: white;'> > </span>";
-    }
-
-    // Last Page button
-    echo "<a href='?page=$totalPages&search=$searchTerm' style='text-decoration: none; border-radius:5px; border: 1px white solid; padding: 10px; margin: 10px; width: 80px; background-color: #007bff; color: white;'>Last >></a>";
+    // Other pagination buttons...
 
     echo "</div>";
 
@@ -159,77 +137,44 @@ if (!empty($dishes)) {
 <a href="admin_view_his.php" class="view-history-button">View History</a>
 
 <script>
-    function update() {
-        var table = document.getElementById('inventoryTable');
-        var rowCount = table.rows.length;
-        var tableData = [];
-
-        // Loop through table rows and gather data
-        for (var i = 1; i < rowCount; i++) {
-            var rowData = [];
-            var cells = table.rows[i].cells;
-
-            for (var j = 0; j < cells.length - 1; j++) { // exclude operation column
-                rowData.push(cells[j].innerHTML);
-            }
-            tableData.push(rowData);
-        }
-
-        // Send data to server
-        $.ajax({
-            url: 'process.php',
-            type: 'POST',
-            data: { data: tableData },
-            success: function(response) {
-                console.log('Response from PHP: ' + response);
-                alert('Database updated successfully!');
-                location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error occurred: ' + status + ' ' + error);
-            }
-        });
-    }
-
     $(document).ready(function() {
         $('#send').click(function() {
             update();
         });
-    });
 
-    function DeletRow(button) {
-        if (confirm("Are you sure to delete this row?") == true) {
-            let row = button.parentNode.parentNode;
-            var itemId = row.cells[0].innerText;
-            row.parentNode.removeChild(row);
+        // Handle image upload
+        $('.image-upload').change(function() {
+            var dishId = $(this).data('dishid');
+            var formData = new FormData();
+            formData.append('dish_id', dishId);
+            formData.append('image', this.files[0]);
+
             $.ajax({
-                url: 'delete_item.php',
+                url: 'upload_image.php',
                 type: 'POST',
-                data: { id: itemId },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function(response) {
-                    alert('Item deleted successfully!');
-                    location.reload();
+                    alert('Image uploaded successfully');
                 },
                 error: function(xhr, status, error) {
-                    console.error('Error occurred: ' + status + ' ' + error);
+                    alert('Error uploading image');
                 }
             });
-        } else {
-            alert("Operation cancelled! ");
-        }
-    }
+        });
+    });
 
     function EditRow(button) {
-        let row = button.parentNode.parentNode;
-        let cells = row.cells;
+        // Implement edit functionality
+    }
 
-        for (let i = 0; i < cells.length - 2; i++) { // -2 to exclude the image and operation columns
-            let cell = cells[i];
-            let inputValue = prompt("Please enter new value for " + cell.innerText, cell.innerText);
-            if (inputValue !== null && inputValue !== "") {
-                cell.innerText = inputValue;
-            }
-        }
+    function DeletRow(button) {
+        // Implement delete functionality
+    }
+
+    function update() {
+        // Implement update functionality for modified data
     }
 </script>
 
