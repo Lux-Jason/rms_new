@@ -150,7 +150,7 @@ if (!empty($dishes)) {
             formData.append('image', this.files[0]);
 
             $.ajax({
-                url: 'upload_image.php',
+                url: 'upload_image.php', // 如果需要处理图像上传，参考此路径
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -166,17 +166,48 @@ if (!empty($dishes)) {
     });
 
     function EditRow(button) {
-        // Implement edit functionality
+        var row = $(button).closest('tr');
+        var dishId = row.find('td').eq(0).text();
+        var dishName = row.find('td').eq(1).text();
+        var ingredient = row.find('td').eq(2).text();
+        var description = row.find('td').eq(3).text();
+        var type = row.find('td').eq(4).text();
+        var amount = row.find('td').eq(5).text();
+        var note = row.find('td').eq(6).text();
+
+        // Open a form or popup to edit these values
+        console.log('Editing:', dishId, dishName, ingredient, description, type, amount, note);
+        // You can redirect or open a modal for editing
+        window.location.href = `edit_item_form.php?dish_id=${dishId}&dish_name=${dishName}&ingredient=${ingredient}&description=${description}&type=${type}&amount=${amount}&note=${note}`;
     }
 
     function DeletRow(button) {
-        // Implement delete functionality
+        var row = $(button).closest('tr');
+        var dishId = row.find('td').eq(0).text();
+
+        // Confirm deletion and then send AJAX request
+        if (confirm('Are you sure you want to delete this item?')) {
+            $.ajax({
+                url: 'admin_delete_item.php',
+                type: 'POST',
+                data: { id: dishId },
+                success: function(response) {
+                    alert('Dish deleted');
+                    row.remove(); // Remove the row from the table
+                },
+                error: function(xhr, status, error) {
+                    alert('Error deleting dish');
+                }
+            });
+        }
     }
 
     function update() {
-        // Implement update functionality for modified data
+        // Handle update logic for edited data
+        alert("Update logic goes here");
     }
 </script>
+
 
 </body>
 </html>
