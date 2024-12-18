@@ -33,8 +33,8 @@
             <div style="width: 20px;"></div>
             <nav>
                 <a href="index.php" class="button">Home</a>
-                <a href="menu.html" class="button">All Dishes</a>
-                <a href="reserve_tb.html" class="button">Reserve a table</a>
+                <a href="menu.php" class="button">All Dishes</a>
+                <a href="reserve_tb.php" class="button">Reserve a table</a>
             </nav>
         </div>
         <div>
@@ -82,10 +82,11 @@
     </section>
 
     <!-- Footer -->
+
     <footer>
         <div class="footer-content">
             <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
-            <a href="admin.html">Admin Page</a>
+            <a href="admin.php">Admin Page</a>
         </div>
     </footer>
 

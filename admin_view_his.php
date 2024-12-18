@@ -155,7 +155,7 @@ $conn = null; // Close the database connection
 <footer>
     <div class="footer-content">
         <p>&copy; 2024 Qiao's Handmade. All rights reserved</p>
-        <a href="admin.html">Admin Page</a>
+        <a href="admin.php">Admin Page</a>
     </div>
 </footer>
 
