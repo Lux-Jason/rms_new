@@ -2,7 +2,7 @@
 session_start();
 include "connectdb.php";
 
-// Ensure user is an admin before processing
+// 确保用户是管理员
 if (!isset($_SESSION['username'])) {
     echo "You are not logged in.";
     exit();
@@ -17,34 +17,34 @@ if (isset($_POST['dish_id']) && isset($_POST['dish_name']) && isset($_POST['ingr
     $amount = $_POST['amount'];
     $note = $_POST['note'];
 
-    // Handle image upload
-    $image = null;  // Default is no image update
+    // 处理图片上传
+    $image = null;  // 默认不更新图片
     if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        // Get image file details
+        // 获取图像文件详情
         $imageTmpName = $_FILES['image']['tmp_name'];
         $imageName = $_FILES['image']['name'];
         $imageType = $_FILES['image']['type'];
 
-        // Read image file content
+        // 读取图像文件内容
         $imageData = file_get_contents($imageTmpName);
-        $image = $imageData; // Store the binary image data
+        $image = $imageData; // 存储二进制图像数据
     }
 
     try {
-        // Prepare the UPDATE query
+        // 准备 UPDATE 查询
         $sql = "UPDATE menu SET dish_name = :dish_name, ingredient = :ingredient, description = :description, type = :type, amount = :amount, note = :note";
 
-        // If there's an image, add it to the query
+        // 如果有图像，则添加图像字段
         if ($image !== null) {
             $sql .= ", image = :image";
         }
 
         $sql .= " WHERE dish_id = :dish_id";
 
-        // Prepare the statement
+        // 准备语句
         $stmt = $conn->prepare($sql);
 
-        // Bind values
+        // 绑定值
         $stmt->bindParam(':dish_name', $dish_name);
         $stmt->bindParam(':ingredient', $ingredient);
         $stmt->bindParam(':description', $description);
@@ -53,12 +53,12 @@ if (isset($_POST['dish_id']) && isset($_POST['dish_name']) && isset($_POST['ingr
         $stmt->bindParam(':note', $note);
         $stmt->bindParam(':dish_id', $dish_id, PDO::PARAM_INT);
 
-        // Bind image if it's being updated
+        // 如果有图像，绑定图像字段
         if ($image !== null) {
             $stmt->bindParam(':image', $image, PDO::PARAM_LOB);
         }
 
-        // Execute the query
+        // 执行查询
         $stmt->execute();
 
         echo "Item updated successfully!";
