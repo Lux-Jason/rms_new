@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 
 header('Content-Type: application/json');
 
@@ -8,10 +9,13 @@ $input = file_get_contents('php://input');
 // Decode the JSON data
 $data = json_decode($input, true);
 
+// get oid
+$order_id = $_SESSION['order_id']; // get order_id
+
 // Get the dish_id from the decoded data
 if (isset($data['dish_id']) && !empty($data['dish_id'])) {
     $dishId = $data['dish_id']; // get dish_id
-    // $order_id = $_SESSION['order_id']; // get order_id
+
     // We use a single order id generated and stored in the session, and when the user logged out, the session is destroyed and the user cannot get access to this cart. 
 
     // Validate the dish_id to ensure it's a positive integer
@@ -35,13 +39,13 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
 
         // Fetch the result
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        /*
+        
         if ($result) {
             // Return the result as JSON
             $username = $_SESSION['username']; 
             $type = $_SESSION['type']; 
 
-            $sqlUser = "SELECT b_id FROM buyer WHERE username = : username"; 
+            $sqlUser = "SELECT b_id FROM buyer WHERE buyer_name = :username"; 
             $stmt = $conn->prepare($sqlUser);
             $stmt->bindParam(":username", $username, PDO::PARAM_STR); 
             $stmt->execute(); 
@@ -59,8 +63,8 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
 
             $sqlCheck = "SELECT num_dishes FROM order_detail WHERE order_id = :order_id AND dish_id = :dish_id"; 
             $stmtCheck = $conn->prepare($sqlCheck);
-            $stmtCheck->bindParam(":order_id", $orderid, PDO::PARAM_STR); 
-            $stmtCheck->bindParam("dish_id", $dishId, PDO::PARAM_STR); 
+            $stmtCheck->bindParam(":order_id", $orderid, PDO::PARAM_INT); 
+            $stmtCheck->bindParam("dish_id", $dishId, PDO::PARAM_INT); 
             $stmtCheck->execute();
             $orderDetail = $stmtCheck->fetch(PDO::FETCH_ASSOC);
             if ($orderDetail) {
@@ -68,29 +72,29 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
                 $sqlUpdate = "UPDATE order_detail SET num_dishes = :num_dishes, price = :price WHERE order_id = :order_id AND dish_id = :dish_id";
                 $stmtUpdate = $conn->prepare($sqlUpdate);
                 $stmtUpdate->bindParam("num_dishes", $numDishes, PDO::PARAM_INT); 
-                $stmtUpdate->bindParam("price", $price, PDO::PARAM_INT); 
-                $stmtUpdate->bindParam("order_id", $orderid, PDO::PARAM_STR); 
-                $stmtUpdate->bindParam("dish_id", $price, PDO::PARAM_STR); 
+                $stmtUpdate->bindParam("price", $price, PDO::PARAM_STR); 
+                $stmtUpdate->bindParam("order_id", $orderid, PDO::PARAM_INT); 
+                $stmtUpdate->bindParam("dish_id", $price, PDO::PARAM_INT); 
                 $stmtUpdate->execute();
             } else {
                 $numDishes = 1; 
                 $sqlInsert = "INSERT INTO order_detail (order_id, dish_id, num_dishes, price, status) VALUES (:order_id, :dish_id, :num_dishes, :price, 'inprogress')";
                 $stmtInsert = $conn->prepare($sqlInsert);
-                $stmtInsert->bindParam(':order_id', $orderId, PDO::PARAM_STR);
+                $stmtInsert->bindParam(':order_id', $orderId, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':dish_id', $dishId, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':num_dishes', $numDishes, PDO::PARAM_INT);
-                $stmtInsert->bindParam(':price', $price, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':price', $price, PDO::PARAM_STR);
                 $stmtInsert->execute(); 
             }
             
-        */
+        
             echo json_encode($result);
-        /*
+        
         } else {
             // If no dish is found, return an error message
             echo json_encode(['error' => 'Dish not found']);
         }
-        */
+        
     } catch (PDOException $e) {
         // Handle database errors and return a JSON response
         echo json_encode(['error' => 'Database error: ' . $e->getMessage()]);

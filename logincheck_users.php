@@ -36,6 +36,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $_SESSION['order_id'] = $oid;
             // 规避随机编码重复的可能情况
 
+            $oid = $oid; 
+
             // 获取当前时间
             $currentTime = date('Y-m-d H:i:s');
 
