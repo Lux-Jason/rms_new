@@ -140,13 +140,13 @@ if (isset($_SESSION['username'])) {
                 <!-- To be laid in the middle! -->
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="collection.svg" style="width: 40px;  ">
+                        <img src="collection.svg" style="height: 40px;  ">
                     </div>
                     <p>My Collections</p>
                 </div>
                 <div class="personal-functions-buttons_mp">
                     <div id="icon-personal-functions_mp" style="width: 100%; align-items: center; justify-content: center;">
-                        <img src="order_his.svg" style="width: 40px; ">
+                        <img src="order_his.svg" style="height: 40px; ">
                     </div>
                     <p>My Orders</p>
                 </div>

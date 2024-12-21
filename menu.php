@@ -175,7 +175,6 @@ $totalPages = ceil($total / $dishesPerPage);
 
 <!-- Recommended Dishes -->
 <section class="recommended-dishes" style="margin-top: 0;">
-    <h2>Recommended Dishes</h2>
     <section class="dishes-display">
         <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
             <?php foreach ($dishes as $dish): ?>
