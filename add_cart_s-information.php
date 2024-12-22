@@ -9,9 +9,6 @@ $input = file_get_contents('php://input');
 // Decode the JSON data
 $data = json_decode($input, true);
 
-// get oid
-$order_id = $_SESSION['order_id']; // get order_id
-
 // Get the dish_id from the decoded data
 if (isset($data['dish_id']) && !empty($data['dish_id'])) {
     $dishId = $data['dish_id']; // get dish_id
@@ -44,6 +41,9 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
             // Return the result as JSON
             $username = $_SESSION['username']; 
             $type = $_SESSION['type']; 
+            // get oid
+            $order_id = $_SESSION['order_id']; 
+            echo $order_id;
 
             $sqlUser = "SELECT b_id FROM buyer WHERE buyer_name = :username"; 
             $stmt = $conn->prepare($sqlUser);
@@ -59,28 +59,28 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
             if ($type === 'vip') {
                 $price *= 0.9; // vip user discount
             }
-            $orderid = $_SESSION['order_id']; 
+            $orderid = $order_id; 
 
             $sqlCheck = "SELECT num_dishes FROM order_detail WHERE order_id = :order_id AND dish_id = :dish_id"; 
             $stmtCheck = $conn->prepare($sqlCheck);
             $stmtCheck->bindParam(":order_id", $orderid, PDO::PARAM_INT); 
-            $stmtCheck->bindParam("dish_id", $dishId, PDO::PARAM_INT); 
+            $stmtCheck->bindParam(":dish_id", $dishId, PDO::PARAM_INT); 
             $stmtCheck->execute();
             $orderDetail = $stmtCheck->fetch(PDO::FETCH_ASSOC);
             if ($orderDetail) {
                 $numDishes = $orderDetail["num_dishes"]+1;
                 $sqlUpdate = "UPDATE order_detail SET num_dishes = :num_dishes, price = :price WHERE order_id = :order_id AND dish_id = :dish_id";
                 $stmtUpdate = $conn->prepare($sqlUpdate);
-                $stmtUpdate->bindParam("num_dishes", $numDishes, PDO::PARAM_INT); 
-                $stmtUpdate->bindParam("price", $price, PDO::PARAM_STR); 
-                $stmtUpdate->bindParam("order_id", $orderid, PDO::PARAM_INT); 
-                $stmtUpdate->bindParam("dish_id", $price, PDO::PARAM_INT); 
+                $stmtUpdate->bindParam(":num_dishes", $numDishes, PDO::PARAM_INT); 
+                $stmtUpdate->bindParam(":price", $price, PDO::PARAM_STR); 
+                $stmtUpdate->bindParam(":order_id", $orderid, PDO::PARAM_INT); 
+                $stmtUpdate->bindParam(":dish_id", $price, PDO::PARAM_INT); 
                 $stmtUpdate->execute();
             } else {
                 $numDishes = 1; 
                 $sqlInsert = "INSERT INTO order_detail (order_id, dish_id, num_dishes, price, status) VALUES (:order_id, :dish_id, :num_dishes, :price, 'inprogress')";
                 $stmtInsert = $conn->prepare($sqlInsert);
-                $stmtInsert->bindParam(':order_id', $orderId, PDO::PARAM_INT);
+                $stmtInsert->bindParam(':order_id', $orderid, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':dish_id', $dishId, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':num_dishes', $numDishes, PDO::PARAM_INT);
                 $stmtInsert->bindParam(':price', $price, PDO::PARAM_STR);

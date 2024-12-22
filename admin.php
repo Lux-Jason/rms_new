@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwapSpot Login</title>
+    <title>Qiao's Handmade Login</title>
     <link rel="icon" href="qiao_logo.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>

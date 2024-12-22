@@ -293,18 +293,18 @@ if (isset($_SESSION['username'])) {
     <button id="back-to-top" style="display: none;">&uarr;</button>
 
     <div id="cartModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeCartModal()">&times;</span>
-            <h2>My Cart</h2>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be dynamically inserted here -->
-            </div>
-            <div class="cart-summary">
-                <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
-                <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
-            </div>
+    <div class="modal-content">
+        <span class="close" onclick="closeCartModal()">&times;</span>
+        <h2>My Cart</h2>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+        <div class="cart-summary">
+            <div class="total-quantity">Total Quantity: <span id="totalQuantity">0</span>&emsp;Total Price: $<span id="totalPrice">0.00</span></div>
+            <div><button id="checkout_button" style="margin-top: 12px;">Check Out</button></div>
         </div>
     </div>
+</div>
 
 </div>
 
@@ -342,13 +342,35 @@ if (isset($_SESSION['username'])) {
 
     function openCart() {
         document.getElementById("cartModal").style.display = "block";
+        fetch('load_cart.php')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('cartItems').innerHTML = html;
+                updateTotals();
+            })
+            .catch(error => console.error('Error fetching cart items:', error));
     }
 
     function closeCartModal() {
         document.getElementById("cartModal").style.display = "none";
     }
 
+    function updateTotals() {
+        let totalQuantity = 0;
+        let totalPrice = 0;
+        const cartItems = document.querySelectorAll('.cart-item');
+        cartItems.forEach(item => {
+            const quantity = parseFloat(item.getAttribute('data-quantity'));
+            const price = parseFloat(item.getAttribute('data-price'));
+            totalQuantity += quantity;
+            totalPrice += quantity * price;
+        });
+        document.getElementById('totalQuantity').innerText = totalQuantity;
+        document.getElementById('totalPrice').innerText = totalPrice.toFixed(2);
+    }
+
     // Function to load cart items from the database
+    /*
     function loadCart() {
         fetch('get_cart_items.php') // Replace with the actual backend endpoint
             .then(response => response.json())
@@ -359,6 +381,9 @@ if (isset($_SESSION['username'])) {
             })
             .catch(error => console.error('Error fetching cart data:', error));
     }
+    */
+
+    /*
 
     // Function to update cart display
     function updateCartDisplay() {
@@ -458,6 +483,7 @@ if (isset($_SESSION['username'])) {
             })
             .catch(error => console.error('Error adding item to cart:', error));
     }
+    */
 
     // Event listener for "Add to Cart" buttons
     /* document.querySelectorAll('.add-to-cart-button').forEach(button => {

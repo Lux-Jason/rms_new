@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['register'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwapSpot Register</title>
+    <title>Qiao's Handmade Register</title>
     <link rel="icon" href="qiao_logo.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
