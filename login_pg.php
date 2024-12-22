@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwapSpot Login</title>
+    <title>Qiao's Handmade Login</title>
     <link rel="icon" href="qiao_logo.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
@@ -87,7 +87,7 @@
             <button type="submit">Login</button>
         </form>
         <p><a href="reset_pwd_pg.php" class="links">Forgot Password?</a></p>
-        <p>Don't have an account? <a href="registry_page.php" class="links">Register</a></p>
+        <p>Don't have an account? <a href="register.php" class="links">Register</a></p>
     </div>
 </div>
 

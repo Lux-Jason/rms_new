@@ -23,8 +23,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             $_SESSION['type'] = $user['type']; // 用户类型
             $_SESSION['remains'] = $user['remains']; // 余额 (如果适用)
             $_SESSION['last_activity'] = time(); // 记录最后活动时间
-            $min = 1000000000; 
-            $max = 9999999999; 
+            $min = 100000000; 
+            $max = 999999999; 
+            // this range is modified as the maximum number that int type holds is 2147483647, so it kept generating the same id if the range is too large. 
             do {
                 $oid = mt_rand($min, $max);
                 $stmt = $conn->prepare("SELECT COUNT(*) FROM `order` WHERE order_id = :oid");
@@ -34,9 +35,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
             } while ($count > 0);
             
             $_SESSION['order_id'] = $oid;
-            // 规避随机编码重复的可能情况
-
-            $oid = $oid; 
 
             // 获取当前时间
             $currentTime = date('Y-m-d H:i:s');

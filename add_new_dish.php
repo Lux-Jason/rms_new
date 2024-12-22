@@ -5,8 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwapSpot Admin Add Item</title>
-    <link rel="icon" href="SwapSpot_logo_small.svg" type="image/x-icon">
+    <title>Qiao's Handmade Admin Add Item</title>
+    <link rel="icon" href="Qiao's Handmade_logo_small.svg" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="styles.css">
     <style>
         body {
@@ -70,7 +70,7 @@
 <body>
 <div class="main-container">
     <div class="add_item_admin-container">
-        <img src="SwapSpot_logo.svg" style="width: 300px;">
+        <img src="Qiao's Handmade_logo.svg" style="width: 300px;">
         <h1 style="font-family: 'Segoe UI Light', Arial, sans-serif; padding: 0px; margin: 0px; color: #aaa;" id="greetings"></h1>
         <h2 style="margin: 20px;">Admin Add Item</h2>
         <form action="additem_sql_op.php" method="post">
