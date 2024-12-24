@@ -182,25 +182,25 @@ $totalPages = ceil($total / $dishesPerPage);
                     <!-- Convert image from BLOB to Base64 and embed in img src -->
                     <?php if ($dish['image']): ?>
                         <img src="data:image/jpeg;base64,<?php echo base64_encode($dish['image']); ?>"
-                             alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
-                             loading="lazy"
-                             oncontextmenu="return false"
-                             onselectstart="return false"
-                             ondragstart="return false"
-                             onbeforecopy="return false"
-                             oncopy="document.selection.empty()"
-                             onselect="document.selection.empty()">
+                                alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
+                                loading="lazy"
+                                oncontextmenu="return false"
+                                onselectstart="return false"
+                                ondragstart="return false"
+                                onbeforecopy="return false"
+                                oncopy="document.selection.empty()"
+                                onselect="document.selection.empty()">
                     <?php else: ?>
                         <!-- Placeholder if no image is available -->
                         <img src="./nodish.jpg"
-                             alt="No Image Available"
-                             loading="lazy"
-                             oncontextmenu="return false"
-                             onselectstart="return false"
-                             ondragstart="return false"
-                             onbeforecopy="return false"
-                             oncopy="document.selection.empty()"
-                             onselect="document.selection.empty()">
+                                alt="No Image Available"
+                                loading="lazy"
+                                oncontextmenu="return false"
+                                onselectstart="return false"
+                                ondragstart="return false"
+                                onbeforecopy="return false"
+                                oncopy="document.selection.empty()"
+                                onselect="document.selection.empty()">
                     <?php endif; ?>
                     <div class="dish-info">
                         <div class="name"><?php echo $dish['dish_name']; ?></div>

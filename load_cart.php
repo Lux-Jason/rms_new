@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+$userType = $_SESSION['type'];
+
 if (!isset($_SESSION['order_id'])) {
     die('Order ID not set in session.');
 }
@@ -48,21 +51,36 @@ if (empty($orderDetails)) {
             $base64Image = base64_encode($detail['image']);
             $src = "data:image/jpeg;base64," . htmlspecialchars($base64Image);
         } else {
-            $src = "path/to/placeholder.jpg"; // Provide a default image
+            $src = "nodish.jpg"; // Provide a default image
         }
 
-        echo '
-        <div class="cart-item" data-quantity="' . $numDishes . '" data-price="' . $price . '">
-            <div class="item-image">
-                <img src="' . $src . '" alt="' . $dishName . ' image">
+        if ($userType == "vip") {
+            echo '
+            <div class="cart-item" data-quantity="' . $numDishes . '" data-price="' . $price . '">
+                <div class="item-image">
+                    <img src="' . $src . '" alt="' . $dishName . ' image">
+                </div>
+                <div class="item-details">
+                    <div class="item-name">' . $dishName . '</div>
+                    <div class="item-info">Discount: 10%&emsp;Quantity: ' . $numDishes . '&emsp;Price: $' . $price . '</div>
+                    <div class="item-total">Total Price: $' . number_format($totalItemPrice, 2) . '</div>
+                </div>
             </div>
-            <div class="item-details">
-                <div class="item-name">' . $dishName . '</div>
-                <div class="item-info">Discount: 10%&emsp;Quantity: ' . $numDishes . '&emsp;Price: $' . $price . '</div>
-                <div class="item-total">Total Price: $' . number_format($totalItemPrice, 2) . '</div>
+            ';
+        } else {
+            echo '
+            <div class="cart-item" data-quantity="' . $numDishes . '" data-price="' . $price . '">
+                <div class="item-image">
+                    <img src="' . $src . '" alt="' . $dishName . ' image">
+                </div>
+                <div class="item-details">
+                    <div class="item-name">' . $dishName . '</div>
+                    <div class="item-info">Discount: 0%&emsp;Quantity: ' . $numDishes . '&emsp;Price: $' . $price . '</div>
+                    <div class="item-total">Total Price: $' . number_format($totalItemPrice, 2) . '</div>
+                </div>
             </div>
-        </div>
-        ';
+            ';
+        }
     }
 }
 ?>
