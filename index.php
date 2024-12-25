@@ -341,6 +341,7 @@ if (isset($_SESSION['username'])) {
     let isMember = false; // Default: not a member
 
     function openCart() {
+        clearDiv();
         document.getElementById("cartModal").style.display = "block";
         fetch('load_cart.php')
             .then(response => response.text())
@@ -349,6 +350,10 @@ if (isset($_SESSION['username'])) {
                 updateTotals();
             })
             .catch(error => console.error('Error fetching cart items:', error));
+    }
+
+    function clearDiv() {
+        document.getElementById('cartItems').innerHTML = '';
     }
 
     function closeCartModal() {

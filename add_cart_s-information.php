@@ -40,12 +40,11 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
         if ($result) {
             // Return the result as JSON
             $username = $_SESSION['username']; 
-            $type = $_SESSION['type']; 
             // get oid
             $order_id = $_SESSION['order_id']; 
             echo $order_id;
 
-            $sqlUser = "SELECT b_id FROM buyer WHERE buyer_name = :username"; 
+            $sqlUser = "SELECT b_id, type FROM buyer WHERE buyer_name = :username"; 
             $stmt = $conn->prepare($sqlUser);
             $stmt->bindParam(":username", $username, PDO::PARAM_STR); 
             $stmt->execute(); 
@@ -55,9 +54,11 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
                 exit(); 
             }
             $userId = $userResult["b_id"]; 
-            $price = $result['price']; 
-            if ($type === 'vip') {
+            $userType = $userResult["type"]; 
+            $price = (float)$result['price'];
+            if ($userType === 'vip') {
                 $price *= 0.9; // vip user discount
+                echo "Discounted price: " . $price; 
             }
             $orderid = $order_id; 
 
@@ -74,7 +75,7 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
                 $stmtUpdate->bindParam(":num_dishes", $numDishes, PDO::PARAM_INT); 
                 $stmtUpdate->bindParam(":price", $price, PDO::PARAM_STR); 
                 $stmtUpdate->bindParam(":order_id", $orderid, PDO::PARAM_INT); 
-                $stmtUpdate->bindParam(":dish_id", $price, PDO::PARAM_INT); 
+                $stmtUpdate->bindParam(":dish_id", $dishId, PDO::PARAM_INT); 
                 $stmtUpdate->execute();
             } else {
                 $numDishes = 1; 

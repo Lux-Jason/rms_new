@@ -176,42 +176,42 @@ $totalPages = ceil($total / $dishesPerPage);
 <!-- Recommended Dishes -->
 <section class="recommended-dishes" style="margin-top: 0;">
     <section class="dishes-display">
-        <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
-            <?php foreach ($dishes as $dish): ?>
-                <div class="dish">
-                    <!-- Convert image from BLOB to Base64 and embed in img src -->
-                    <?php if ($dish['image']): ?>
-                        <img src="data:image/jpeg;base64,<?php echo base64_encode($dish['image']); ?>"
-                             alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
-                             loading="lazy"
-                             oncontextmenu="return false"
-                             onselectstart="return false"
-                             ondragstart="return false"
-                             onbeforecopy="return false"
-                             oncopy="document.selection.empty()"
-                             onselect="document.selection.empty()">
-                    <?php else: ?>
-                        <!-- Placeholder if no image is available -->
-                        <img src="./nodish.jpg"
-                             alt="No Image Available"
-                             loading="lazy"
-                             oncontextmenu="return false"
-                             onselectstart="return false"
-                             ondragstart="return false"
-                             onbeforecopy="return false"
-                             oncopy="document.selection.empty()"
-                             onselect="document.selection.empty()">
-                    <?php endif; ?>
-                    <div class="dish-info">
-                        <div class="name"><?php echo $dish['dish_name']; ?></div>
-                        <div class="price"><?php echo '$' . $dish['price']; ?></div>
-                        <button class="add-to-cart-button" id="add-to-cart_<?php echo $dish['dish_id']; ?>">Add to Cart</button>
+            <div class="dishes-container" style="margin-left: 3%; margin-right: 3%;">
+                <?php foreach ($dishes as $dish): ?>
+                    <div class="dish">
+                        <!-- Convert image from BLOB to Base64 and embed in img src -->
+                        <?php if ($dish['image']): ?>
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($dish['image']); ?>"
+                                 alt="<?php echo htmlspecialchars($dish['dish_name']); ?>"
+                                 loading="lazy"
+                                 oncontextmenu="return false"
+                                 onselectstart="return false"
+                                 ondragstart="return false"
+                                 onbeforecopy="return false"
+                                 oncopy="document.selection.empty()"
+                                 onselect="document.selection.empty()">
+                        <?php else: ?>
+                            <!-- Placeholder if no image is available -->
+                            <img src="./nodish.jpg"
+                                 alt="No Image Available"
+                                 loading="lazy"
+                                 oncontextmenu="return false"
+                                 onselectstart="return false"
+                                 ondragstart="return false"
+                                 onbeforecopy="return false"
+                                 oncopy="document.selection.empty()"
+                                 onselect="document.selection.empty()">
+                        <?php endif; ?>
+                        <div class="dish-info">
+                            <div class="name"><?php echo $dish['dish_name']; ?></div>
+                            <div class="price"><?php echo '$' . $dish['price']; ?></div>
+                            <button class="add-to-cart-button" id="add-to-cart_<?php echo $dish['dish_id']; ?>">Add to Cart</button>
+                        </div>
+                        <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
+                        <!-- Hidden form to store the data of the item -->
                     </div>
-                    <input type="text" class="hidden-dishid" id="<?php echo $dish['dish_id']; ?>" value="<?php echo $dish['dish_id']; ?>" readonly/>
-                    <!-- Hidden form to store the data of the item -->
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
     </section>
 </section>
 
