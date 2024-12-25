@@ -1,5 +1,6 @@
 <?php
-session_start(); 
+include 'connectdb.php';
+session_start();
 
 header('Content-Type: application/json');
 
@@ -22,7 +23,7 @@ if (isset($data['dish_id']) && !empty($data['dish_id'])) {
     }
 
     // Include database connection
-    include 'connectdb.php';
+
 
     try {
         
