@@ -6,33 +6,46 @@ $userType = $_SESSION['type'];
 if (!isset($_SESSION['order_id'])) {
     die('Order ID not set in session.');
 }
-
 $order_id = $_SESSION['order_id'];
 
-try {
-    // Fetch order details with dish information in a single query
-    $sql = "SELECT od.*, m.dish_name, m.image 
-            FROM order_detail od 
-            JOIN menu m ON od.dish_id = m.dish_id 
-            WHERE od.order_id = :order_id AND od.status = 'inprogress'";
+// Database connection
+$conn = new mysqli('localhost', 'root', '', 'rms');
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
+// Fetch order details
+$sql = "SELECT * FROM order_detail WHERE order_id = ? AND status = 'inprogress'";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $order_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$orderDetails = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+
+// Fetch dish names and images
+foreach ($orderDetails as &$detail) {
+    $dish_id = $detail['dish_id'];
+    $sql = "SELECT dish_name, image FROM menu WHERE dish_id = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':order_id', $order_id, PDO::PARAM_INT);
+    $stmt->bind_param("i", $dish_id);
     $stmt->execute();
-    $orderDetails = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $result = $stmt->get_result();
+    $menu = $result->fetch_assoc();
+    $detail['dish_name'] = $menu['dish_name'];
+    $detail['image'] = $menu['image'];
+    $stmt->close();
+}
 
-    // Apply discount based on user type
-    $discount = ($_SESSION['type'] === 'vip') ? 0.1 : 0;  // 10% discount for VIP users
-
-    // Output HTML for cart items
-    if (empty($orderDetails)) {
-        echo '<p>Your cart is empty.</p>';
-    } else {
-        foreach ($orderDetails as $detail) {
-            $dishName = htmlspecialchars($detail['dish_name']);
-            $numDishes = htmlspecialchars($detail['num_dishes']);
-            $price = htmlspecialchars($detail['price']);
-            $totalItemPrice = $numDishes * $price * (1 - $discount);
+// Output HTML for cart items
+if (empty($orderDetails)) {
+    echo '<p>Your cart is empty.</p>';
+} else {
+    foreach ($orderDetails as $detail) {
+        $dishName = htmlspecialchars($detail['dish_name']);
+        $numDishes = htmlspecialchars($detail['num_dishes']);
+        $price = htmlspecialchars($detail['price']);
+        $totalItemPrice = $numDishes * $price;
 
         if ($detail['image']) {
             $base64Image = base64_encode($detail['image']);
