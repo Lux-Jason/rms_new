@@ -341,7 +341,7 @@ if (isset($_SESSION['username'])) {
     let isMember = false; // Default: not a member
 
     function openCart() {
-        clearDiv();
+        // clearDiv();
         document.getElementById("cartModal").style.display = "block";
         fetch('load_cart.php')
             .then(response => response.text())
@@ -352,9 +352,11 @@ if (isset($_SESSION['username'])) {
             .catch(error => console.error('Error fetching cart items:', error));
     }
 
+    /*
     function clearDiv() {
         document.getElementById('cartItems').innerHTML = '';
     }
+    */
 
     function closeCartModal() {
         document.getElementById("cartModal").style.display = "none";
@@ -612,6 +614,28 @@ if (isset($_SESSION['username'])) {
                     console.error('Error:', error);
                 });
         });
+    });
+
+    var orderId = document.getElementById('order_id_input').value; // Replace with actual retrieval method
+
+    document.getElementById('checkout_button').addEventListener('click', function() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'checkout.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.status === 'success') {
+                    alert(response.message);
+                    // Optionally redirect or perform other actions
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            } else {
+                alert('Request failed. Returned status of ' + xhr.status);
+            }
+        };
+        xhr.send('order_id=' + encodeURIComponent(orderId));
     });
 
 </script>

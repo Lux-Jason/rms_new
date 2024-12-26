@@ -23,7 +23,7 @@ $result = $stmt->get_result();
 $orderDetails = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Fetch dish names and images
+# Fetch dish names and images
 foreach ($orderDetails as &$detail) {
     $dish_id = $detail['dish_id'];
     $sql = "SELECT dish_name, image FROM menu WHERE dish_id = ?";
@@ -45,6 +45,18 @@ if (empty($orderDetails)) {
         $dishName = htmlspecialchars($detail['dish_name']);
         $numDishes = htmlspecialchars($detail['num_dishes']);
         $price = htmlspecialchars($detail['price']);
+
+        $dish_id = $detail['dish_id'];
+        $sql = "SELECT dish_name, image FROM menu WHERE dish_id = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("i", $dish_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $menu = $result->fetch_assoc();
+        $detail['dish_name'] = $menu['dish_name'];
+        $detail['image'] = $menu['image'];
+        $stmt->close();
+
         $totalItemPrice = $numDishes * $price;
 
         if ($detail['image']) {

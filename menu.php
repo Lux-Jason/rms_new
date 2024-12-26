@@ -12,12 +12,20 @@
 
 <div class="selector-outside">
     <!-- Selector container remains the same -->
+
 </div>
 
 <!-- Login Modal remains the same -->
-
-<!-- Fetch and display dishes from the database -->
 <?php
+session_start();
+if (isset($_SESSION['username'])) {
+    $username = $_SESSION['username'];
+    echo "<script>alert('Welcome, $username')</script>";
+    echo "<script>var isLoggedIn = true;</script>";
+} else {
+    echo "<script>var isLoggedIn = false;</script>";
+}
+
 include 'connectdb.php';
 $dishesPerPage = 12;
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -342,12 +350,38 @@ $totalPages = ceil($total / $dishesPerPage);
     let isMember = false; // Default: not a member
 
     function openCart() {
+        clearDiv();
         document.getElementById("cartModal").style.display = "block";
+        fetch('load_cart.php')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('cartItems').innerHTML = html;
+                updateTotals();
+            })
+            .catch(error => console.error('Error fetching cart items:', error));
+    }
+    function clearDiv() {
+        document.getElementById('cartItems').innerHTML = '';
     }
 
     function closeCartModal() {
         document.getElementById("cartModal").style.display = "none";
     }
+
+    function updateTotals() {
+        let totalQuantity = 0;
+        let totalPrice = 0;
+        const cartItems = document.querySelectorAll('.cart-item');
+        cartItems.forEach(item => {
+            const quantity = parseFloat(item.getAttribute('data-quantity'));
+            const price = parseFloat(item.getAttribute('data-price'));
+            totalQuantity += quantity;
+            totalPrice += quantity * price;
+        });
+        document.getElementById('totalQuantity').innerText = totalQuantity;
+        document.getElementById('totalPrice').innerText = totalPrice.toFixed(2);
+    }
+
 
     // Function to load cart items from the database
     function loadCart() {
